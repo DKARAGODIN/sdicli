@@ -3,13 +3,14 @@ package pro.karagodin.commands;
 import pro.karagodin.exceptions.CLIException;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Command {
 
-    protected List<String> arguments;
+    protected List<String> arguments = new ArrayList<>();
 
-    abstract Reader run(Reader reader) throws CLIException;
+    public abstract Reader run(Reader reader) throws CLIException;
 
     public void setArguments(List<String> arguments) {
         this.arguments = arguments;

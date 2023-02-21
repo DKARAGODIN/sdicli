@@ -8,6 +8,10 @@ public class EchoCommand extends Command {
 
     @Override
     public Reader run(Reader reader) {
-        return new StringReader(arguments.stream().collect(Collectors.joining(" ")));
+        if (arguments.isEmpty()) {
+            return reader == null ? new StringReader("") : reader;
+        } else {
+            return new StringReader(arguments.stream().collect(Collectors.joining(" ")));
+        }
     }
 }
