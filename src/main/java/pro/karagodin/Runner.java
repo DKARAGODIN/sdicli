@@ -4,6 +4,7 @@ import pro.karagodin.commands.Command;
 import pro.karagodin.exceptions.CLIException;
 
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 
 public class Runner {
@@ -12,6 +13,6 @@ public class Runner {
         for (Command command : commands) {
             reader = command.run(reader);
         }
-        return reader;
+        return reader == null ? new StringReader("") : reader;
     }
 }

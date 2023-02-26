@@ -28,7 +28,9 @@ public class WcCommand extends Command {
                 try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))){
                     read(fileReader);
                 } catch (Exception e) {
-                    throw new CLIException("Exception happened wile reading file " + fileName , e);
+                    CLIException ex = new CLIException("Exception happened wile reading file " + fileName , e);
+                    ex.setNeedToPrintStackTrace(true);
+                    throw ex;
                 }
             }
         }
