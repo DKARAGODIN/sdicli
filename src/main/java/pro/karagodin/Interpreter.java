@@ -1,5 +1,6 @@
 package pro.karagodin;
 
+import pro.karagodin.commands.CatCommand;
 import pro.karagodin.commands.Command;
 import pro.karagodin.commands.EchoCommand;
 import pro.karagodin.commands.ExecuteCommand;
@@ -30,6 +31,11 @@ public class Interpreter {
             String[] parsed = line.split(" ");
             List<Command> commands = new ArrayList<>();
             switch (parsed[0]) {
+                case "cat":
+                    Command cat = new CatCommand();
+                    fillArguments(cat, parsed);
+                    commands.add(cat);
+                    break;
                 case "exec":
                     Command run = new ExecuteCommand();
                     fillArguments(run, parsed);
