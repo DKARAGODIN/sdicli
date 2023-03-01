@@ -1,6 +1,5 @@
 package pro.karagodin.commands;
 
-import pro.karagodin.Runner;
 import pro.karagodin.exceptions.CLIException;
 
 import java.io.BufferedReader;

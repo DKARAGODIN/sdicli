@@ -9,7 +9,7 @@ public class EchoCommand extends Command {
     @Override
     public Reader run(Reader reader) {
         if (arguments.isEmpty()) {
-            return reader == null ? new StringReader("") : reader;
+            return new StringReader("");
         } else {
             return new StringReader(arguments.stream().collect(Collectors.joining(" ")));
         }

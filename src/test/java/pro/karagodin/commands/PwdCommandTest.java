@@ -5,26 +5,27 @@ import pro.karagodin.Runner;
 
 import java.io.BufferedReader;
 import java.io.Reader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EchoCommandTest {
-
+class PwdCommandTest {
     @Test
     public void empty() throws Exception {
         Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
-        Command a = new EchoCommand();
+        Command a = new PwdCommand();
         commands.add(a);
         Reader reader = runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
-        assertNull(actual);
+        String expected = Paths.get("").toAbsolutePath().toString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -32,14 +33,15 @@ class EchoCommandTest {
         Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
-        Command a = new EchoCommand();
+        Command a = new PwdCommand();
         a.setArguments(Arrays.asList("Hello world"));
         commands.add(a);
         Reader reader = runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
-        assertEquals("Hello world", actual);
+        String expected = Paths.get("").toAbsolutePath().toString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -50,13 +52,14 @@ class EchoCommandTest {
         Command first = new EchoCommand();
         first.setArguments(Arrays.asList("First echo command arguments"));
         commands.add(first);
-        Command second = new EchoCommand();
+        Command second = new PwdCommand();
         commands.add(second);
         Reader reader = runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
-        assertNull(actual);
+        String expected = Paths.get("").toAbsolutePath().toString();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -67,13 +70,14 @@ class EchoCommandTest {
         Command first = new EchoCommand();
         first.setArguments(Arrays.asList("First echo command arguments"));
         commands.add(first);
-        Command second = new EchoCommand();
+        Command second = new PwdCommand();
         commands.add(second);
         second.setArguments(Arrays.asList("Second echo command arguments "));
         Reader reader = runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
-        assertEquals("Second echo command arguments ", actual);
+        String expected = Paths.get("").toAbsolutePath().toString();
+        assertEquals(expected, actual);
     }
 }
