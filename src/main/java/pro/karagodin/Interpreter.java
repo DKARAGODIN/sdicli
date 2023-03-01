@@ -2,6 +2,7 @@ package pro.karagodin;
 
 import pro.karagodin.commands.Command;
 import pro.karagodin.commands.EchoCommand;
+import pro.karagodin.commands.ExecuteCommand;
 import pro.karagodin.commands.ExitCommand;
 import pro.karagodin.commands.PwdCommand;
 import pro.karagodin.commands.WcCommand;
@@ -29,6 +30,11 @@ public class Interpreter {
             String[] parsed = line.split(" ");
             List<Command> commands = new ArrayList<>();
             switch (parsed[0]) {
+                case "exec":
+                    Command run = new ExecuteCommand();
+                    fillArguments(run, parsed);
+                    commands.add(run);
+                    break;
                 case "wc":
                     Command wc = new WcCommand();
                     fillArguments(wc, parsed);
@@ -62,7 +68,7 @@ public class Interpreter {
                     e.printStackTrace(System.out);
                 }
                 if (e.isExit()) {
-                    System.exit(e.getStatus_code());
+                    System.exit(e.getStatusCode());
                 }
             }
         }

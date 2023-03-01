@@ -4,7 +4,7 @@ public class CLIException extends Exception {
 
     private boolean exit = false;
     private int statusCode = 0;
-    private boolean needToPrintStackTrace = false;
+    private boolean needToPrintStackTrace = true;
 
     public CLIException() {
     }
@@ -29,20 +29,12 @@ public class CLIException extends Exception {
         this.exit = exit;
     }
 
-    public int getStatus_code() {
-        return statusCode;
-    }
-
-    public void setStatus_code(int status_code) {
-        this.statusCode = status_code;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     public int getStatusCode() {
         return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
     }
 
     public boolean isNeedToPrintStackTrace() {
