@@ -9,6 +9,7 @@ public class ExitCommand extends Command {
     public Reader run(Reader reader) throws CLIException {
         CLIException exception = new CLIException("Good bye");
         exception.setExit(true);
+        exception.setNeedToPrintStackTrace(false);
         throw exception;
     }
 }

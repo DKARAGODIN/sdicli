@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.List;
 
 public class Runner {
+
     public Reader run(List<Command> commands) throws CLIException {
         Reader reader = null;
         for (Command command : commands) {
