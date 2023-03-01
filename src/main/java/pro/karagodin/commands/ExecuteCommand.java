@@ -64,8 +64,8 @@ public class ExecuteCommand extends Command {
 
             int exitValue = p.waitFor();
             if (exitValue != 0) {
-                CLIException e = new CLIException();
-                e.setStatusCode(exitValue);
+                if (runner != null)
+                    runner.setLastCommandExitCode(exitValue);
             }
             return new StringReader(sb.toString());
         } catch (Exception e) {

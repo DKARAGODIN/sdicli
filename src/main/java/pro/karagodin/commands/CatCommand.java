@@ -1,8 +1,10 @@
 package pro.karagodin.commands;
 
+import pro.karagodin.Runner;
 import pro.karagodin.exceptions.CLIException;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
@@ -23,7 +25,12 @@ public class CatCommand extends Command {
                     String line = null;
                     while ((line = fileReader.readLine()) != null) {
                         sb.append(line);
+                        sb.append(System.lineSeparator());
                     }
+                } catch (FileNotFoundException e) {
+                    CLIException exception = new CLIException(fileName + ": No such file or directory");
+                    exception.setNeedToPrintStackTrace(false);
+                    throw exception;
                 } catch (Exception e) {
                     throw new CLIException("Exception happened wile reading file " + fileName , e);
                 }
