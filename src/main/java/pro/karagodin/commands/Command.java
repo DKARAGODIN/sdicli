@@ -2,17 +2,20 @@ package pro.karagodin.commands;
 
 import pro.karagodin.exceptions.CLIException;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
 import java.util.List;
 
-public interface Command {
+public abstract class Command {
 
-    void setArguments(List<String> args);
+    protected List<String> arguments;
 
-    Writer run(Reader reader) throws CLIException;
+    abstract Reader run(Reader reader) throws CLIException;
 
+    public void setArguments(List<String> arguments) {
+        this.arguments = arguments;
+    }
+
+    public List<String> getArguments() {
+        return arguments;
+    }
 }
