@@ -2,7 +2,7 @@
 
 Структурная диаграмма: [link](https://drive.google.com/file/d/1oOyFDbzb-k4jFylwcKNzB57CGmUAdjKh/view?usp=sharing)
 
-![](diagram.png)
+![](resources/diagram.png)
 
 ## Общее описание системы
 
