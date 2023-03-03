@@ -18,7 +18,7 @@ public class CatCommand extends Command {
         if (this.arguments.isEmpty()) {
             return reader == null ? new StringReader("") : reader;
         } else {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (String fileName : arguments) {
                 try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))){
                     String line = null;

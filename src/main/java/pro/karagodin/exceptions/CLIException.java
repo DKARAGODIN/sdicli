@@ -6,9 +6,6 @@ public class CLIException extends Exception {
     private int statusCode = 0;
     private boolean needToPrintStackTrace = true;
 
-    public CLIException() {
-    }
-
     public CLIException(String message) {
         super(message);
     }
@@ -17,20 +14,12 @@ public class CLIException extends Exception {
         super(message, cause);
     }
 
-    public CLIException(Throwable cause) {
-        super(cause);
-    }
-
     public boolean isExit() {
         return exit;
     }
 
     public void setExit(boolean exit) {
         this.exit = exit;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
     }
 
     public int getStatusCode() {

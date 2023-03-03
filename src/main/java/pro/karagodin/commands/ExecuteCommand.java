@@ -50,7 +50,7 @@ public class ExecuteCommand extends Command {
                 }
             }
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             line = null;
             while ((line = standardOut.readLine()) != null) {
                 sb.append(line);
@@ -62,11 +62,7 @@ public class ExecuteCommand extends Command {
                 sb.append(System.lineSeparator());
             }
 
-            int exitValue = p.waitFor();
-            if (exitValue != 0) {
-                if (runner != null)
-                    runner.setLastCommandExitCode(exitValue);
-            }
+            this.exitCode = p.waitFor();
             return new StringReader(sb.toString());
         } catch (Exception e) {
             throw new CLIException("Exception happened while executing command", e);
