@@ -1,7 +1,6 @@
 package pro.karagodin;
 
 import pro.karagodin.commands.Command;
-import pro.karagodin.commands.ExecuteCommand;
 import pro.karagodin.exceptions.CLIException;
 
 import java.io.Reader;
