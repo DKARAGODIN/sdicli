@@ -27,7 +27,7 @@ class ExecuteCommandTest {
             actualBuffer.append(System.lineSeparator());
         }
 
-        String version = Runtime.version().version().get(0).toString();
+        String version = System.getProperty("java.version");
         assertTrue(actualBuffer.toString().contains(version));
     }
 }
