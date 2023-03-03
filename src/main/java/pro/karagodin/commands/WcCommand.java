@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 
 public class WcCommand extends Command {
 
@@ -25,7 +26,7 @@ public class WcCommand extends Command {
             }
         } else {
             for (String fileName : arguments) {
-                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))){
+                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))){
                     read(fileReader);
                 } catch (Exception e) {
                     throw new CLIException("Exception happened wile reading file " + fileName , e);
@@ -40,7 +41,7 @@ public class WcCommand extends Command {
         String line = null;
         while ((line = br.readLine()) != null) {
             lines++;
-            bytes += line.getBytes().length;
+            bytes += line.getBytes(StandardCharsets.UTF_8).length;
             words += line.split(" ").length;
         }
     }

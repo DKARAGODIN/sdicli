@@ -17,10 +17,6 @@ public abstract class Command {
         this.arguments = arguments;
     }
 
-    public List<String> getArguments() {
-        return arguments;
-    }
-
     public int getExitCode() {
         return exitCode;
     }
