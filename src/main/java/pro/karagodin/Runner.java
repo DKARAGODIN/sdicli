@@ -13,9 +13,6 @@ public class Runner {
     public Reader run(List<Command> commands) throws CLIException {
         Reader reader = null;
         for (Command command : commands) {
-            if (command instanceof ExecuteCommand)
-                command.setRunner(this);
-
             reader = command.run(reader);
 
             if (command.getExitCode() != 0)
