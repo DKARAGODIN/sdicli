@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +25,14 @@ public class Interpreter {
      * @throws IOException
      */
     public void start() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
         Runner runner = new Runner();
         while(true) {
             System.out.printf("> ");
             String line = bufferedReader.readLine();
+            if (line == null)
+                break;
+
             String[] parsed = line.split(" ");
             List<Command> commands = new ArrayList<>();
             switch (parsed[0]) {
@@ -63,10 +68,11 @@ public class Interpreter {
             }
             try {
                 Reader reader = runner.run(commands);
-                BufferedReader resultReader = new BufferedReader(reader);
-                String strCurrentLine;
-                while ((strCurrentLine = resultReader.readLine()) != null) {
-                    System.out.println(strCurrentLine);
+                try (BufferedReader resultReader = new BufferedReader(reader)) {
+                    String strCurrentLine;
+                    while ((strCurrentLine = resultReader.readLine()) != null) {
+                        System.out.println(strCurrentLine);
+                    }
                 }
             } catch (CLIException e) {
                 System.out.println(e.getMessage());

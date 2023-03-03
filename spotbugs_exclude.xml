@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="DM_EXIT" />
+    </Match>
+
+    <Match>
+        <Class name="pro.karagodin.Enviroment"/>
+    </Match>
+
+    <Match>
+        <Class name="pro.karagodin.commands.Command"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+</FindBugsFilter>

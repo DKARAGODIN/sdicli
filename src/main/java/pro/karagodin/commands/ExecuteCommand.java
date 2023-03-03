@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class ExecuteCommand extends Command {
@@ -35,13 +36,13 @@ public class ExecuteCommand extends Command {
         BufferedReader standardOut = null;
         BufferedReader standardErr = null;
         try {
-            Process p = runtime.exec(getArguments().toArray(String[]::new), getEnvp());
-            standardOut = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            standardErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            Process p = runtime.exec(arguments.toArray(String[]::new), getEnvp());
+            standardOut = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
+            standardErr = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
             OutputStream processInput = p.getOutputStream();
 
             //Writing to process stdIn
-            bufferedProcessInput = new BufferedWriter(new OutputStreamWriter(processInput));
+            bufferedProcessInput = new BufferedWriter(new OutputStreamWriter(processInput, StandardCharsets.UTF_8));
             String line = null;
             if (reader != null) {
                 BufferedReader inputReader = new BufferedReader(reader);

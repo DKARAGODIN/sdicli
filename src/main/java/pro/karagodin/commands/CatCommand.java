@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -20,7 +21,7 @@ public class CatCommand extends Command {
         } else {
             StringBuilder sb = new StringBuilder();
             for (String fileName : arguments) {
-                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))){
+                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))){
                     String line = null;
                     while ((line = fileReader.readLine()) != null) {
                         sb.append(line);
