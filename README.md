@@ -191,6 +191,10 @@ mvn clean test
 mvn jacoco:report -f pom.xml
 # Открыть в браузере файл target/site/jacoco/index.html
 ```
+Для запуска линтера и поиска багов
+```
+mvn clean verify
+```
 
 ## Команда 
 * Карагодин Дмитрий
