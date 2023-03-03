@@ -10,8 +10,6 @@ import java.util.List;
 
 public class Runner {
 
-    private int lastCommandExitCode = 0;
-
     public Reader run(List<Command> commands) throws CLIException {
         Reader reader = null;
         for (Command command : commands) {
@@ -20,17 +18,9 @@ public class Runner {
 
             reader = command.run(reader);
 
-            if (lastCommandExitCode != 0)
+            if (command.getExitCode() != 0)
                 break;
         }
         return reader == null ? new StringReader("") : reader;
-    }
-
-    public int getLastCommandExitCode() {
-        return lastCommandExitCode;
-    }
-
-    public void setLastCommandExitCode(int lastCommandExitCode) {
-        this.lastCommandExitCode = lastCommandExitCode;
     }
 }
