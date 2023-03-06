@@ -1,17 +1,25 @@
 package pro.karagodin;
 
+import static java.util.Map.entry;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import pro.karagodin.exceptions.CLIException;
 
-import static java.util.Map.entry;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class Scanner {
+
+    private static final Map<String, LexemeType> STR_TO_LEXEME_TYPE = Map.ofEntries(
+            entry("eq", LexemeType.ASSIGN),
+            entry("dq", LexemeType.DQ),
+            entry("sq", LexemeType.SQ),
+            entry("pipe", LexemeType.PIPE),
+            entry("space", LexemeType.SPACE),
+            entry("str", LexemeType.STR));
+
     public List<Lexeme> scan(String str) throws CLIException {
         var strRegex = "(?<str>[^=\\|\\s\'\"]+)";
         var equalRegex = "(?<eq>=)";
@@ -22,7 +30,7 @@ public class Scanner {
         var fullRegex = "^" + strRegex + "|" + equalRegex + "|" + pipeRegex + "|" + dqRegex + "|" + sqRegex + "|"
                 + spaceRegex;
 
-        return scan(str, fullRegex, strToLexemeType.keySet());
+        return scan(str, fullRegex, STR_TO_LEXEME_TYPE.keySet());
 
     }
 
@@ -35,7 +43,7 @@ public class Scanner {
         while (matcher.find()) {
             for (var groupName : groupsNames)
                 if (matcher.group(groupName) != null) {
-                    lexemes.add(new Lexeme(matcher.group(groupName), strToLexemeType.get(groupName)));
+                    lexemes.add(new Lexeme(matcher.group(groupName), STR_TO_LEXEME_TYPE.get(groupName)));
                     //System.out.println(groupName + ": " + matcher.group(groupName));
                     break;
 
@@ -48,13 +56,4 @@ public class Scanner {
         }
         return lexemes;
     }
-
-    private static Map<String, LexemeType> strToLexemeType = Map.ofEntries(
-            entry("eq", LexemeType.ASSIGN),
-            entry("dq", LexemeType.DQ),
-            entry("sq", LexemeType.SQ),
-            entry("pipe", LexemeType.PIPE),
-            entry("space", LexemeType.SPACE),
-            entry("str", LexemeType.STR));
-
 }

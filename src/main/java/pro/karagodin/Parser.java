@@ -3,7 +3,13 @@ package pro.karagodin;
 import java.util.ArrayList;
 import java.util.List;
 
-import pro.karagodin.commands.*;
+import pro.karagodin.commands.CatCommand;
+import pro.karagodin.commands.Command;
+import pro.karagodin.commands.EchoCommand;
+import pro.karagodin.commands.ExecuteCommand;
+import pro.karagodin.commands.ExitCommand;
+import pro.karagodin.commands.PwdCommand;
+import pro.karagodin.commands.WcCommand;
 import pro.karagodin.exceptions.CLIException;
 
 public class Parser {
@@ -15,20 +21,20 @@ public class Parser {
     }
 
     private List<String> parseCommandAndArguments(List<Lexeme> lexemes) {
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         var argBuilder = new StringBuilder();
         int i = 0;
-        while (i < lexemes.size() && lexemes.get(i).type == LexemeType.SPACE) {
+        while (i < lexemes.size() && lexemes.get(i).getType() == LexemeType.SPACE) {
             i++;
         }
         while (i < lexemes.size()) {
-            while (i < lexemes.size() && lexemes.get(i).type != LexemeType.SPACE) {
-                argBuilder.append(lexemes.get(i).view);
+            while (i < lexemes.size() && lexemes.get(i).getType() != LexemeType.SPACE) {
+                argBuilder.append(lexemes.get(i).getView());
                 i++;
             }
             args.add(argBuilder.toString());
             argBuilder.setLength(0);
-            while (i < lexemes.size() && lexemes.get(i).type == LexemeType.SPACE) {
+            while (i < lexemes.size() && lexemes.get(i).getType() == LexemeType.SPACE) {
                 i++;
             }
         }

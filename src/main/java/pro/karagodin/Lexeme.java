@@ -3,25 +3,20 @@ package pro.karagodin;
 import java.util.Objects;
 
 public class Lexeme {
-    public LexemeType getType() {
-        return type;
-    }
-
-    public void setType(LexemeType type) {
-        this.type = type;
-    }
-
-    public String getView() {
-        return view;
-    }
-
-    public void setView(String view) {
-        this.view = view;
-    }
+    private LexemeType type;
+    private String view;
 
     public Lexeme(String view, LexemeType type) {
         this.view = view;
         this.type = type;
+    }
+
+    public LexemeType getType() {
+        return type;
+    }
+
+    public String getView() {
+        return view;
     }
 
     @Override
@@ -41,9 +36,4 @@ public class Lexeme {
     public String toString() {
         return "{View: " + view + ", type: " + type.toString() + "}";
     }
-
-    protected LexemeType type;
-    protected String view;
-
-
 }
