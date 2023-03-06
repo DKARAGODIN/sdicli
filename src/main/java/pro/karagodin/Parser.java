@@ -50,7 +50,9 @@ public class Parser {
             case "echo":
                 return new EchoCommand();
             default:
-                throw new CLIException("Not known command: " + cmdName);
+                CLIException e = new CLIException("Not known command: " + cmdName);
+                e.setNeedToPrintStackTrace(false);
+                throw e;
         }
     }
 }
