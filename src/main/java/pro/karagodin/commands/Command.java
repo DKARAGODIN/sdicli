@@ -13,6 +13,10 @@ public abstract class Command {
 
     public abstract Reader run(Reader reader) throws CLIException;
 
+    public List<String> getArguments() {
+        return arguments;
+    }
+
     public void setArguments(List<String> arguments) {
         this.arguments = arguments;
     }
@@ -26,15 +30,7 @@ public abstract class Command {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Command cmd = (Command) o;
-        return cmd.arguments.equals(arguments) && exitCode == cmd.exitCode;
-    }   
-
-    @Override
     public String toString() {
-        return "command with args: " + arguments.toString();
+        return "Command with args: " + arguments.toString();
     }
 }

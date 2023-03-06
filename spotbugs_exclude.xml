@@ -5,11 +5,13 @@
     </Match>
 
     <Match>
-        <Class name="pro.karagodin.Enviroment"/>
+        <Class name="pro.karagodin.commands.Command"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
     </Match>
-
     <Match>
         <Class name="pro.karagodin.commands.Command"/>
         <Bug pattern="EI_EXPOSE_REP2"/>
     </Match>
+
+    
 </FindBugsFilter>

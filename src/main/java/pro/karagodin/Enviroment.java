@@ -1,15 +1,16 @@
 package pro.karagodin;
 
-import java.util.Dictionary;
+import java.util.Map;
 
 public class Enviroment {
+
+    private static final Map<String, String> ENVIRONMENT_VARIABLES = System.getenv();
+
     public static String getVariableValue(String var) {
-        return vars.get(var);
+        return ENVIRONMENT_VARIABLES.get(var);
     }
 
     public static void setVariable(String var, String value) {
-        vars.put(var, value);
+        ENVIRONMENT_VARIABLES.put(var, value);
     }
-
-    static protected Dictionary<String, String> vars;
 }
