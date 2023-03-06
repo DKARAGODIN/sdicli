@@ -1,16 +1,18 @@
 package pro.karagodin;
 
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import pro.karagodin.exceptions.CLIException;
+
 import static java.util.Map.entry;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Scanner {
-    public List<Lexeme> scan(String str) {
+    public List<Lexeme> scan(String str) throws CLIException {
         var strRegex = "(?<str>[^=\\|\\s\'\"]+)";
         var equalRegex = "(?<eq>=)";
         var pipeRegex = "(?<pipe>\\|)";
@@ -24,7 +26,7 @@ public class Scanner {
 
     }
 
-    public static List<Lexeme> scan(String text, String regex, Collection<String> groupsNames) {
+    public static List<Lexeme> scan(String text, String regex, Collection<String> groupsNames) throws CLIException {
         System.out.println("regex: " + regex);
         System.out.println("text: " + text);
         var pattern = Pattern.compile(regex);
@@ -42,7 +44,7 @@ public class Scanner {
         }
 
         if (matcher.regionStart() != matcher.regionEnd()) {
-            throw new IllegalArgumentException("Parse error at pos " + matcher.regionStart());
+            throw new CLIException("Parse error at pos " + matcher.regionStart());
         }
         return lexemes;
     }

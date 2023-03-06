@@ -1,15 +1,16 @@
 package pro.karagodin;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import pro.karagodin.exceptions.CLIException;
+
 public class ScannerTest {
     @Test
-    void testScanWithoutQuotes(){
+    void testScanWithoutQuotes() throws CLIException{
         String str = "cat file1 file2";
         Lexeme[] expected = new Lexeme[]{
             new Lexeme("cat", LexemeType.STR),
@@ -23,7 +24,7 @@ public class ScannerTest {
     }
 
     @Test
-    void testScanWithQuotes(){
+    void testScanWithQuotes() throws CLIException{
         String str = "cat \"file name\" 'file2 name'";
         Lexeme[] expected = new Lexeme[]{
             new Lexeme("cat", LexemeType.STR),
@@ -37,7 +38,7 @@ public class ScannerTest {
     }
 
     @Test
-    void testScanWithNestedQuotes(){
+    void testScanWithNestedQuotes() throws CLIException{
         String str = "cat \"file 'name'\" 'file2 \"name\"'";
         Lexeme[] expected = new Lexeme[]{
             new Lexeme("cat", LexemeType.STR),
@@ -51,7 +52,7 @@ public class ScannerTest {
     }
 
     @Test
-    void testScanWithSequenceLexemes(){
+    void testScanWithSequenceLexemes() throws CLIException{
         String str = "cat \"file\"' name'";
         Lexeme[] expected = new Lexeme[]{
             new Lexeme("cat", LexemeType.STR),
