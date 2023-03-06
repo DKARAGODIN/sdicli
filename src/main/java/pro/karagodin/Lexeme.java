@@ -37,6 +37,11 @@ public class Lexeme {
         return Objects.hash(type, view);
     }
 
+    @Override
+    public String toString() {
+        return "{View: " + view + ", type: " + type.toString() + "}";
+    }
+
     protected LexemeType type;
     protected String view;
 

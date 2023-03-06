@@ -1,5 +1,5 @@
 package pro.karagodin;
 
 public enum LexemeType {
-    ID, STR, ASSIGN, PIPE
+    STR, ASSIGN, PIPE, SPACE, DQ, SQ
 }
