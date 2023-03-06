@@ -1,10 +1,10 @@
 package pro.karagodin.commands;
 
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Paths;
+
+import pro.karagodin.exceptions.CLIException;
 
 public class PwdCommand extends Command {
     @Override

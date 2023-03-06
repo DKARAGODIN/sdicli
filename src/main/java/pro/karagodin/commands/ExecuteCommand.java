@@ -1,7 +1,5 @@
 package pro.karagodin.commands;
 
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,6 +10,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+
+import pro.karagodin.exceptions.CLIException;
 
 public class ExecuteCommand extends Command {
 

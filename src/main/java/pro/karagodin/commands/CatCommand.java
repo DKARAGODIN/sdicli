@@ -1,13 +1,13 @@
 package pro.karagodin.commands;
 
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+
+import pro.karagodin.exceptions.CLIException;
 
 /**
  * TODO Implement custom reader to reduce memory usage
@@ -20,7 +20,7 @@ public class CatCommand extends Command {
         } else {
             StringBuilder sb = new StringBuilder();
             for (String fileName : arguments) {
-                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))){
+                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
                     String line = null;
                     while ((line = fileReader.readLine()) != null) {
                         sb.append(line);
@@ -31,7 +31,7 @@ public class CatCommand extends Command {
                     exception.setNeedToPrintStackTrace(false);
                     throw exception;
                 } catch (Exception e) {
-                    throw new CLIException("Exception happened wile reading file " + fileName , e);
+                    throw new CLIException("Exception happened wile reading file " + fileName, e);
                 }
             }
             StringReader outputReader = new StringReader(sb.toString());
