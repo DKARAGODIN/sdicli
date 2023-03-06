@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pro.karagodin.commands.*;
+import pro.karagodin.exceptions.CLIException;
 
 public class Parser {
-    public List<Command> parse(List<Lexeme> lexemes) {
+    public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(lexemes);
         var cmd = getCommandByName(cmdAndArgs.get(0));
         cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
@@ -34,7 +35,7 @@ public class Parser {
         return args;
     }
 
-    private Command getCommandByName(String cmdName) {
+    private Command getCommandByName(String cmdName) throws CLIException {
         switch (cmdName) {
             case "cat":
                 return new CatCommand();
@@ -49,7 +50,7 @@ public class Parser {
             case "echo":
                 return new EchoCommand();
             default:
-                throw new IllegalArgumentException("Not known command: " + cmdName);
+                throw new CLIException("Not known command: " + cmdName);
         }
     }
 }

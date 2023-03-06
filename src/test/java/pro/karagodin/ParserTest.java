@@ -8,10 +8,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import pro.karagodin.commands.CatCommand;
+import pro.karagodin.exceptions.CLIException;
 
 public class ParserTest {
     @Test
-    void testParseSimpleCmd() {
+    void testParseSimpleCmd() throws CLIException {
         var lexemes = new Lexeme[] {
                 new Lexeme("cat", LexemeType.STR),
                 new Lexeme(" ", LexemeType.SPACE),
@@ -26,7 +27,7 @@ public class ParserTest {
     }
 
     @Test
-    void testParseCmdWithMultipleSpaces() {
+    void testParseCmdWithMultipleSpaces() throws CLIException {
         var lexemes = new Lexeme[] {
                 new Lexeme("cat", LexemeType.STR),
                 new Lexeme(" ", LexemeType.SPACE),
@@ -44,7 +45,7 @@ public class ParserTest {
     }
 
     @Test
-    void testParseCmdWithNotTrimedSpaces() {
+    void testParseCmdWithNotTrimedSpaces() throws CLIException {
         var lexemes = new Lexeme[] {
                 new Lexeme(" ", LexemeType.SPACE),
                 new Lexeme("cat", LexemeType.STR),
@@ -62,7 +63,7 @@ public class ParserTest {
     }
 
     @Test
-    void testParseCmdWithoutArgs() {
+    void testParseCmdWithoutArgs() throws CLIException {
         var lexemes = new Lexeme[] {
                 new Lexeme("cat", LexemeType.STR),
         };
