@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
-
 /**
  * TODO Implement custom reader to reduce memory usage
  */

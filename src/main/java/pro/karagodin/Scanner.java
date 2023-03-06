@@ -27,8 +27,8 @@ public class Scanner {
     }
 
     public static List<Lexeme> scan(String text, String regex, Collection<String> groupsNames) throws CLIException {
-        System.out.println("regex: " + regex);
-        System.out.println("text: " + text);
+        //System.out.println("regex: " + regex);
+        //System.out.println("text: " + text);
         var pattern = Pattern.compile(regex);
         var matcher = pattern.matcher(text);
         var lexemes = new ArrayList<Lexeme>();
@@ -36,7 +36,7 @@ public class Scanner {
             for (var groupName : groupsNames)
                 if (matcher.group(groupName) != null) {
                     lexemes.add(new Lexeme(matcher.group(groupName), strToLexemeType.get(groupName)));
-                    System.out.println(groupName + ": " + matcher.group(groupName));
+                    //System.out.println(groupName + ": " + matcher.group(groupName));
                     break;
 
                 }
