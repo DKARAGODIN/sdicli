@@ -1,10 +1,10 @@
 package pro.karagodin.commands;
 
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
+import pro.karagodin.exceptions.CLIException;
 
 public abstract class Command {
 

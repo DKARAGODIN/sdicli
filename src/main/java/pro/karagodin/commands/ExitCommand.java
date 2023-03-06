@@ -1,10 +1,10 @@
 package pro.karagodin.commands;
 
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.Reader;
 import java.util.List;
 import java.util.Random;
+
+import pro.karagodin.exceptions.CLIException;
 
 public class ExitCommand extends Command {
 

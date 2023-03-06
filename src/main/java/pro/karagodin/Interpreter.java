@@ -1,12 +1,12 @@
 package pro.karagodin;
 
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+
+import pro.karagodin.exceptions.CLIException;
 
 public class Interpreter {
 
@@ -15,7 +15,7 @@ public class Interpreter {
         Runner runner = new Runner();
         var scanner = new Scanner();
         var parser = new Parser();
-        
+
         while (true) {
             System.out.printf("> ");
             String line = bufferedReader.readLine();

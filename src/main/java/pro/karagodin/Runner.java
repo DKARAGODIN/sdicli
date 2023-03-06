@@ -1,11 +1,11 @@
 package pro.karagodin;
 
-import pro.karagodin.commands.Command;
-import pro.karagodin.exceptions.CLIException;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
+
+import pro.karagodin.commands.Command;
+import pro.karagodin.exceptions.CLIException;
 
 public class Runner {
 
