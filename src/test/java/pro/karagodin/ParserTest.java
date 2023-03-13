@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import pro.karagodin.commands.CatCommand;
 import pro.karagodin.commands.Command;
+import pro.karagodin.commands.EchoCommand;
 import pro.karagodin.exceptions.CLIException;
 
 public class ParserTest {
@@ -59,6 +60,24 @@ public class ParserTest {
         };
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("file1", "file2"));
+        var parser = new Parser();
+        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+    }
+
+    @Test
+    void testParseCmdsWithPipes() throws CLIException {
+        var lexemes = new Lexeme[] {
+                new Lexeme("cat", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("file1", LexemeType.DQ),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("|", LexemeType.PIPE),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("echo", LexemeType.STR),
+
+        };
+        var expectedCmds = List.of(new CatCommand(), new EchoCommand());
+        expectedCmds.get(0).setArguments(List.of("file1"));
         var parser = new Parser();
         assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
     }

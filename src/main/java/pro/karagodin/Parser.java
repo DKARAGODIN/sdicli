@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import pro.karagodin.commands.CatCommand;
 import pro.karagodin.commands.Command;
@@ -27,10 +28,30 @@ public class Parser {
             entry("echo", c -> new EchoCommand()));
 
     public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
-        var cmdAndArgs = parseCommandAndArguments(lexemes);
+        var cmdsLexemes = splitByPipe(lexemes);
+        var cmds = new ArrayList<Command>();
+        for(var cmdLexemes: cmdsLexemes)
+            cmds.add(parseCommand(cmdLexemes));
+        return cmds;
+    }
+
+    private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
+        var cmdAndArgs = parseCommandAndArguments(cmdLexemes);
         var cmd = getCommandByName(cmdAndArgs.get(0));
         cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
-        return List.of(cmd);
+        return cmd;
+    }
+
+    private List<List<Lexeme>> splitByPipe(List<Lexeme> lexemes){
+        var pipesIndexes = IntStream.range(0, lexemes.size())
+                .filter(i -> lexemes.get(i).getType() == LexemeType.PIPE)
+                .boxed().toList();
+        var cmds = new ArrayList<>(IntStream.range(0, pipesIndexes.size())
+                .mapToObj(i -> lexemes.subList(i > 0 ? pipesIndexes.get(i - 1) + 1 : 0, pipesIndexes.get(i)))
+                .toList());
+        var lastCmdStart = pipesIndexes.size() > 0 ? pipesIndexes.get(pipesIndexes.size()-1) + 1 : 0;
+        cmds.add(lexemes.subList(lastCmdStart, lexemes.size()));
+        return cmds;
     }
 
     private List<String> parseCommandAndArguments(List<Lexeme> lexemes) {
@@ -47,11 +68,17 @@ public class Parser {
 
 
     private int skipSpaces(int startIndex, List<Lexeme> lexemes) {
-        return (int) (startIndex + lexemes.stream().skip(startIndex).takeWhile(l -> l.getType() == LexemeType.SPACE).count());
+        return (int) (startIndex + lexemes.stream()
+                .skip(startIndex)
+                .takeWhile(l -> l.getType() == LexemeType.SPACE)
+                .count());
     }
 
     private List<String> getArgsComponents(int startIndex, List<Lexeme> lexemes) {
-        return lexemes.stream().skip(startIndex).takeWhile(lex -> lex.getType() != LexemeType.SPACE).map(Lexeme::getView).toList();
+        return lexemes.stream()
+                .skip(startIndex)
+                .takeWhile(lex -> lex.getType() != LexemeType.SPACE)
+                .map(Lexeme::getView).toList();
     }
 
     private Command getCommandByName(String cmdName) throws CLIException {
