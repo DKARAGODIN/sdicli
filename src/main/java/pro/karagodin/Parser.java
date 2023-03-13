@@ -15,6 +15,7 @@ import pro.karagodin.commands.Command;
 import pro.karagodin.commands.EchoCommand;
 import pro.karagodin.commands.ExecuteCommand;
 import pro.karagodin.commands.ExitCommand;
+import pro.karagodin.commands.GrepCommand;
 import pro.karagodin.commands.PwdCommand;
 import pro.karagodin.commands.WcCommand;
 import pro.karagodin.exceptions.CLIException;
@@ -27,6 +28,7 @@ public class Parser {
             entry("pwd", c -> new PwdCommand()),
             entry("exit", c -> new ExitCommand()),
             entry("echo", c -> new EchoCommand()));
+            entry("grep", c -> new GrepCommand()));
 
     private static final String VARIABLE_REGEX = "[a-zA-Z_]\\w*";
 
