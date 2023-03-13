@@ -19,8 +19,8 @@ public class Interpreter {
         while (true) {
             System.out.printf("> ");
             String line = bufferedReader.readLine();
-            if (line == null)
-                break;
+            if ("".equals(line))
+                continue;
 
             try {
                 var lexemes = scanner.scan(line);
