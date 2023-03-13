@@ -11,11 +11,16 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import pro.karagodin.Enviroment;
 import pro.karagodin.exceptions.CLIException;
 
 public class ExecuteCommand extends Command {
 
-    public static final Map<String, String> ENVIRONMENT_VARIABLES = System.getenv();
+    private String command;
+
+    public ExecuteCommand(String command) {
+        this.command = command;
+    }
 
     /**
      * TODO Rewrite with multithreading, cleaner resources handling
@@ -26,28 +31,34 @@ public class ExecuteCommand extends Command {
 
     @Override
     public Reader run(Reader reader) throws CLIException {
-        if (arguments.isEmpty()) {
-            CLIException e = new CLIException("exec command must have at least one argument");
-            e.setNeedToPrintStackTrace(false);
-            throw e;
-        }
         Runtime runtime = Runtime.getRuntime();
         BufferedWriter bufferedProcessInput = null;
         BufferedReader standardOut = null;
         BufferedReader standardErr = null;
         try {
-            Process p = runtime.exec(arguments.toArray(String[]::new), getEnvp());
+            String[] cmdarray = new String[arguments.size() + 1];
+            cmdarray[0] = command;
+            for (int i = 0; i < arguments.size(); i++) {
+                cmdarray[i + 1] = arguments.get(i);
+            }
+            Process p = runtime.exec(cmdarray, getEnvp());
             standardOut = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
             standardErr = new BufferedReader(new InputStreamReader(p.getErrorStream(), StandardCharsets.UTF_8));
-            OutputStream processInput = p.getOutputStream();
 
             //Writing to process stdIn
+            OutputStream processInput = p.getOutputStream();
             bufferedProcessInput = new BufferedWriter(new OutputStreamWriter(processInput, StandardCharsets.UTF_8));
             String line = null;
             if (reader != null) {
                 BufferedReader inputReader = new BufferedReader(reader);
-                while ((line = inputReader.readLine()) != null) {
+                while (true) {
+                    line = inputReader.readLine();
+                    if (line == null) {
+                        bufferedProcessInput.close();
+                        break;
+                    }
                     bufferedProcessInput.write(line);
+                    bufferedProcessInput.write(System.lineSeparator());
                 }
             }
 
@@ -65,7 +76,7 @@ public class ExecuteCommand extends Command {
 
             this.exitCode = p.waitFor();
             return new StringReader(sb.toString());
-        } catch (Exception e) {
+        } catch (IOException | InterruptedException e) {
             throw new CLIException("Exception happened while executing command", e);
         } finally {
             if (bufferedProcessInput != null) {
@@ -100,9 +111,9 @@ public class ExecuteCommand extends Command {
     }
 
     private String[] getEnvp() {
-        String[] envp = new String[ENVIRONMENT_VARIABLES.size()];
+        String[] envp = new String[Enviroment.getEnvironmentSize()];
         int i = 0;
-        for (Map.Entry<String, String> entry : ENVIRONMENT_VARIABLES.entrySet()) {
+        for (Map.Entry<String, String> entry : Enviroment.getEntriesSet()) {
             envp[i] = entry.getKey() + "=" + entry.getValue();
             i++;
         }

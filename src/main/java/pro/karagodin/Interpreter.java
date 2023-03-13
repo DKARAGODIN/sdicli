@@ -15,10 +15,11 @@ public class Interpreter {
         Runner runner = new Runner();
         var scanner = new Scanner();
         var parser = new Parser();
-
         while (true) {
             System.out.printf("> ");
             String line = bufferedReader.readLine();
+            if (line == null)
+                break;
             if ("".equals(line))
                 continue;
 
