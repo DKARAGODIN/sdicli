@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import pro.karagodin.exceptions.CLIException;
 
 public class ScannerTest {
-    @Test
+@Test
     void testScanWithoutQuotes() throws CLIException{
         String str = "cat file1 file2";
         Lexeme[] expected = new Lexeme[]{
@@ -59,6 +59,34 @@ public class ScannerTest {
             new Lexeme(" ", LexemeType.SPACE),
             new Lexeme("file", LexemeType.DQ),
             new Lexeme(" name", LexemeType.SQ)
+        };
+        Scanner scanner = new Scanner();
+        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+    }
+
+    @Test
+    void testScanWithPipes() throws CLIException{
+        String str = "echo abc | echo";
+        Lexeme[] expected = new Lexeme[]{
+                new Lexeme("echo", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("abc", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("|", LexemeType.PIPE),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("echo", LexemeType.STR),
+        };
+        Scanner scanner = new Scanner();
+        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+    }
+
+    @Test
+    void testScanWithDollarSign() throws CLIException{
+        String str = "echo $var";
+        Lexeme[] expected = new Lexeme[]{
+                new Lexeme("echo", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("$var", LexemeType.STR),
         };
         Scanner scanner = new Scanner();
         assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
