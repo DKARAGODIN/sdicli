@@ -16,7 +16,10 @@ public class Parser {
     public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(lexemes);
         var cmd = getCommandByName(cmdAndArgs.get(0));
-        cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
+        if (cmd instanceof ExecuteCommand)
+            cmd.setArguments(cmdAndArgs);
+        else
+            cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
         return List.of(cmd);
     }
 
@@ -45,8 +48,6 @@ public class Parser {
         switch (cmdName) {
             case "cat":
                 return new CatCommand();
-            case "exec":
-                return new ExecuteCommand();
             case "wc":
                 return new WcCommand();
             case "pwd":
@@ -56,9 +57,7 @@ public class Parser {
             case "echo":
                 return new EchoCommand();
             default:
-                CLIException e = new CLIException("Not known command: " + cmdName);
-                e.setNeedToPrintStackTrace(false);
-                throw e;
+                return new ExecuteCommand();
         }
     }
 }
