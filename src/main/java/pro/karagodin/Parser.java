@@ -16,10 +16,7 @@ public class Parser {
     public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(lexemes);
         var cmd = getCommandByName(cmdAndArgs.get(0));
-        if (cmd instanceof ExecuteCommand)
-            cmd.setArguments(cmdAndArgs);
-        else
-            cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
+        cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
         return List.of(cmd);
     }
 
@@ -57,7 +54,7 @@ public class Parser {
             case "echo":
                 return new EchoCommand();
             default:
-                return new ExecuteCommand();
+                return new ExecuteCommand(cmdName);
         }
     }
 }
