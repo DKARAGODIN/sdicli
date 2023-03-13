@@ -8,6 +8,7 @@ import pro.karagodin.commands.Command;
 import pro.karagodin.commands.EchoCommand;
 import pro.karagodin.commands.ExecuteCommand;
 import pro.karagodin.commands.ExitCommand;
+import pro.karagodin.commands.GrepCommand;
 import pro.karagodin.commands.PwdCommand;
 import pro.karagodin.commands.WcCommand;
 import pro.karagodin.exceptions.CLIException;
@@ -53,6 +54,8 @@ public class Parser {
                 return new ExitCommand();
             case "echo":
                 return new EchoCommand();
+            case "grep":
+                return new GrepCommand();
             default:
                 return new ExecuteCommand(cmdName);
         }
