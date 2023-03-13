@@ -1,6 +1,7 @@
 package pro.karagodin;
 
 import java.util.Map;
+import java.util.Set;
 
 public class Enviroment {
 
@@ -12,5 +13,13 @@ public class Enviroment {
 
     public static void setVariable(String var, String value) {
         ENVIRONMENT_VARIABLES.put(var, value);
+    }
+
+    public static int getEnvironmentSize() {
+        return ENVIRONMENT_VARIABLES.size();
+    }
+
+    public static Set<Map.Entry<String, String>> getEntriesSet() {
+        return ENVIRONMENT_VARIABLES.entrySet();
     }
 }
