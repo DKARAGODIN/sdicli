@@ -21,7 +21,7 @@ public class Scanner {
             entry("str", LexemeType.STR));
 
     public List<Lexeme> scan(String str) throws CLIException {
-        var strRegex = "(?<str>[^=\\|\\s\'\"]+)";
+        var strRegex = "(?<str>[^=\\|\\s'\"]+)";
         var equalRegex = "(?<eq>=)";
         var pipeRegex = "(?<pipe>\\|)";
         var dqRegex = "\"(?<dq>[^\"]+)\"";
@@ -35,19 +35,12 @@ public class Scanner {
     }
 
     public static List<Lexeme> scan(String text, String regex, Collection<String> groupsNames) throws CLIException {
-        //System.out.println("regex: " + regex);
-        //System.out.println("text: " + text);
         var pattern = Pattern.compile(regex);
         var matcher = pattern.matcher(text);
         var lexemes = new ArrayList<Lexeme>();
         while (matcher.find()) {
-            for (var groupName : groupsNames)
-                if (matcher.group(groupName) != null) {
-                    lexemes.add(new Lexeme(matcher.group(groupName), STR_TO_LEXEME_TYPE.get(groupName)));
-                    //System.out.println(groupName + ": " + matcher.group(groupName));
-                    break;
-
-                }
+            var groupName = groupsNames.stream().filter(name -> matcher.group(name) != null).findFirst();
+            groupName.ifPresent(s -> lexemes.add(new Lexeme(matcher.group(s), STR_TO_LEXEME_TYPE.get(s))));
             matcher.region(matcher.end(), text.length());
         }
 
