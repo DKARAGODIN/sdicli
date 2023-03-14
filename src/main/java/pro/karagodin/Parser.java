@@ -27,7 +27,7 @@ public class Parser {
             entry("wc", c -> new WcCommand()),
             entry("pwd", c -> new PwdCommand()),
             entry("exit", c -> new ExitCommand()),
-            entry("echo", c -> new EchoCommand()));
+            entry("echo", c -> new EchoCommand()),
             entry("grep", c -> new GrepCommand()));
 
     private static final String VARIABLE_REGEX = "[a-zA-Z_]\\w*";

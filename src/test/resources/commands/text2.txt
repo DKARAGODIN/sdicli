@@ -1,0 +1,2 @@
+Hello world!
+This text was made to test grep command.

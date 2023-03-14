@@ -19,7 +19,7 @@ class CatCommandTest {
         List<Command> commands = new ArrayList<>();
 
         Command first = new CatCommand();
-        first.setArguments(List.of(Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString()));
+        first.setArguments(List.of(Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString()));
         commands.add(first);
         Reader reader = runner.run(commands);
 
@@ -43,8 +43,8 @@ class CatCommandTest {
 
         Command first = new CatCommand();
         first.setArguments(Arrays.asList(
-                Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString(),
-                Paths.get("", "src", "test", "resources", "commands", "testcatcommand.txt").toString()));
+                Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString(),
+                Paths.get("", "src", "test", "resources", "commands", "text1.txt").toString()));
         commands.add(first);
         Reader reader = runner.run(commands);
 
@@ -93,8 +93,8 @@ class CatCommandTest {
         commands.add(first);
         Command second = new CatCommand();
         second.setArguments(Arrays.asList(
-                Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString(),
-                Paths.get("", "src", "test", "resources", "commands", "testcatcommand.txt").toString()));
+                Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString(),
+                Paths.get("", "src", "test", "resources", "commands", "text1.txt").toString()));
         commands.add(second);
         Reader reader = runner.run(commands);
 
@@ -108,11 +108,11 @@ class CatCommandTest {
         String actual = actualBuffer.toString();
         String expected =
                 "Hello world!" + System.lineSeparator() +
-                        "Congratulations, you observe the best piece of software ever made." + System.lineSeparator() +
-                        "Hello world" + System.lineSeparator() +
-                        "This is simple text" + System.lineSeparator() +
-                        "Bye world" + System.lineSeparator() +
-                        ":)(:" + System.lineSeparator();
+                "Congratulations, you observe the best piece of software ever made." + System.lineSeparator() +
+                "Hello world" + System.lineSeparator() +
+                "This is simple text" + System.lineSeparator() +
+                "Bye world" + System.lineSeparator() +
+                ":)(:" + System.lineSeparator();
         assertEquals(expected, actual);
     }
 }

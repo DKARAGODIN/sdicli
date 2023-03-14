@@ -20,7 +20,7 @@ class WcCommandTest {
         List<Command> commands = new ArrayList<>();
 
         Command first = new WcCommand();
-        first.setArguments(Arrays.asList(Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString()));
+        first.setArguments(Arrays.asList(Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString()));
         commands.add(first);
         Reader reader = runner.run(commands);
 
@@ -38,7 +38,7 @@ class WcCommandTest {
         first.setArguments(Arrays.asList("Hello world!"));
         commands.add(first);
         Command second = new WcCommand();
-        second.setArguments(Arrays.asList(Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString()));
+        second.setArguments(Arrays.asList(Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString()));
         commands.add(second);
         Reader reader = runner.run(commands);
 
