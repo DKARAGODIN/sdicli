@@ -102,13 +102,11 @@ public class ParserTest {
                 new Lexeme("value", LexemeType.STR),
         };
         var parser = new Parser();
-        assertNotEquals("value", Enviroment.getVariableValue("var"));
+        Enviroment.setVariable("var", "wrongValue");
         var cmds =  parser.parse(Arrays.asList(lexemes));
         assertEquals(0, cmds.size());
         assertEquals("value", Enviroment.getVariableValue("var"));
     }
-
-
 
     @Test
     void testVariableAssignWithDifferentLexemes() throws CLIException{
@@ -126,11 +124,88 @@ public class ParserTest {
                 new Lexeme("v5", LexemeType.SQ),
         };
         var parser = new Parser();
-        assertNotEquals("v1 v2|v3=v4v5", Enviroment.getVariableValue("var"));
+        Enviroment.setVariable("var", "wrongValue");
         var cmds =  parser.parse(Arrays.asList(lexemes));
         assertEquals(0, cmds.size());
         assertEquals("v1 v2|v3=v4v5", Enviroment.getVariableValue("var"));
     }
+
+    @Test
+    void testSubstitution() throws CLIException{
+        Lexeme[] lexemes = new Lexeme[]{
+                new Lexeme("cat", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("$var", LexemeType.STR),
+        };
+        Enviroment.setVariable("var", "value");
+        var expectedCmds = List.of(new CatCommand());
+        expectedCmds.get(0).setArguments(List.of("value"));
+
+        var parser = new Parser();
+        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+    }
+
+    @Test
+    void testSubstitutionInVariableAssign() throws CLIException{
+        Lexeme[] lexemes = new Lexeme[]{
+                new Lexeme("var", LexemeType.STR),
+                new Lexeme("=", LexemeType.ASSIGN),
+                new Lexeme("$otherVar", LexemeType.STR),
+        };
+        Enviroment.setVariable("otherVar", "value");
+
+        Enviroment.setVariable("var", "wrongValue");
+        var parser = new Parser();
+        var cmds =  parser.parse(Arrays.asList(lexemes));
+        assertEquals(0, cmds.size());
+        assertEquals("value", Enviroment.getVariableValue("var"));
+    }
+
+    @Test
+    void testMultipleSubstitution() throws CLIException{
+        Lexeme[] lexemes = new Lexeme[]{
+                new Lexeme("cat", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("$var$var", LexemeType.STR),
+        };
+        Enviroment.setVariable("var", "value");
+        var expectedCmds = List.of(new CatCommand());
+        expectedCmds.get(0).setArguments(List.of("valuevalue"));
+
+        var parser = new Parser();
+        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+    }
+
+    @Test
+    void testSubstitutionInDoubleQuotes() throws CLIException{
+        Lexeme[] lexemes = new Lexeme[]{
+                new Lexeme("cat", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("str$var", LexemeType.DQ),
+        };
+        Enviroment.setVariable("var", "value");
+        var expectedCmds = List.of(new CatCommand());
+        expectedCmds.get(0).setArguments(List.of("strvalue"));
+
+        var parser = new Parser();
+        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+    }
+
+    @Test
+    void testSubstitutionInSingleQuotes() throws CLIException{
+        Lexeme[] lexemes = new Lexeme[]{
+                new Lexeme("cat", LexemeType.STR),
+                new Lexeme(" ", LexemeType.SPACE),
+                new Lexeme("str$var", LexemeType.SQ),
+        };
+        Enviroment.setVariable("var", "value");
+        var expectedCmds = List.of(new CatCommand());
+        expectedCmds.get(0).setArguments(List.of("str$var"));
+
+        var parser = new Parser();
+        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+    }
+
 
     private void assertListOfCommands(List<? extends Command> expected, List<Command> actual) {
         assertEquals(expected.size(), actual.size());

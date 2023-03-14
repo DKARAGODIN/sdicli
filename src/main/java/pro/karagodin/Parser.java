@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,19 +29,37 @@ public class Parser {
             entry("exit", c -> new ExitCommand()),
             entry("echo", c -> new EchoCommand()));
 
+    private static final String VARIABLE_REGEX = "[a-zA-Z_]\\w*";
+
     public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
-        if(isAssignVariable(lexemes)) {
+        if (isAssignVariable(lexemes)) {
             parseAssignVariable(lexemes);
             return new ArrayList<>();
         }
         var cmdsLexemes = splitByPipe(lexemes);
         var cmds = new ArrayList<Command>();
-        for(var cmdLexemes: cmdsLexemes)
+        for (var cmdLexemes : cmdsLexemes)
             cmds.add(parseCommand(cmdLexemes));
         return cmds;
     }
 
-    private boolean isAssignVariable(List<Lexeme> lexemes){
+    private String substitute(String text) {
+        var pattern = Pattern.compile("\\$(" + VARIABLE_REGEX + ")");
+        var matcher = pattern.matcher(text);
+        var replacedLine = new StringBuilder();
+        while (matcher.find())
+            matcher.appendReplacement(replacedLine, Enviroment.getVariableValue(matcher.group(1)));
+        matcher.appendTail(replacedLine);
+        return replacedLine.toString();
+    }
+
+    private Lexeme substitute(Lexeme lex) {
+        if (lex.getType() == LexemeType.STR || lex.getType() == LexemeType.DQ)
+            return new Lexeme(substitute(lex.getView()), lex.getType());
+        return lex;
+    }
+
+    private boolean isAssignVariable(List<Lexeme> lexemes) {
         return lexemes.size() >= 2
                 && lexemes.get(0).getType() == LexemeType.STR
                 && lexemes.get(1).getType() == LexemeType.ASSIGN
@@ -48,15 +67,15 @@ public class Parser {
     }
 
     private boolean isVariable(String str) {
-        return str.matches("[a-zA-Z_]\\w*");
+        return str.matches(VARIABLE_REGEX);
     }
 
-    private void parseAssignVariable(List<Lexeme> lexemes)  {
+    private void parseAssignVariable(List<Lexeme> lexemes) {
         Enviroment.setVariable(lexemes.get(0).getView(), parseVariableValue(lexemes));
     }
 
-    private String parseVariableValue(List<Lexeme> lexemes){
-        return lexemes.stream().skip(2).map(Lexeme::getView).collect(Collectors.joining());
+    private String parseVariableValue(List<Lexeme> lexemes) {
+        return lexemes.stream().skip(2).map(this::substitute).map(Lexeme::getView).collect(Collectors.joining());
     }
 
     private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
@@ -66,14 +85,14 @@ public class Parser {
         return cmd;
     }
 
-    private List<List<Lexeme>> splitByPipe(List<Lexeme> lexemes){
+    private List<List<Lexeme>> splitByPipe(List<Lexeme> lexemes) {
         var pipesIndexes = IntStream.range(0, lexemes.size())
                 .filter(i -> lexemes.get(i).getType() == LexemeType.PIPE)
                 .boxed().toList();
         var cmds = new ArrayList<>(IntStream.range(0, pipesIndexes.size())
                 .mapToObj(i -> lexemes.subList(i > 0 ? pipesIndexes.get(i - 1) + 1 : 0, pipesIndexes.get(i)))
                 .toList());
-        var lastCmdStart = pipesIndexes.size() > 0 ? pipesIndexes.get(pipesIndexes.size()-1) + 1 : 0;
+        var lastCmdStart = pipesIndexes.size() > 0 ? pipesIndexes.get(pipesIndexes.size() - 1) + 1 : 0;
         cmds.add(lexemes.subList(lastCmdStart, lexemes.size()));
         return cmds;
     }
@@ -82,7 +101,7 @@ public class Parser {
         List<String> args = new ArrayList<>();
         int i = skipSpaces(0, lexemes);
         while (i < lexemes.size()) {
-            var argComps = getArgsComponents(i, lexemes);
+            var argComps = getCmdOrArgComponents(i, lexemes);
             i += argComps.size();
             args.add(String.join("", argComps));
             i = skipSpaces(i, lexemes);
@@ -98,10 +117,11 @@ public class Parser {
                 .count());
     }
 
-    private List<String> getArgsComponents(int startIndex, List<Lexeme> lexemes) {
+    private List<String> getCmdOrArgComponents(int startIndex, List<Lexeme> lexemes) {
         return lexemes.stream()
                 .skip(startIndex)
                 .takeWhile(lex -> lex.getType() != LexemeType.SPACE)
+                .map(this::substitute)
                 .map(Lexeme::getView).toList();
     }
 
