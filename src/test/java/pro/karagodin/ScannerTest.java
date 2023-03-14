@@ -91,4 +91,16 @@ public class ScannerTest {
         Scanner scanner = new Scanner();
         assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
     }
+
+    @Test
+    void testScanVariableAssign() throws CLIException{
+        String str = "var=value";
+        Lexeme[] expected = new Lexeme[]{
+                new Lexeme("var", LexemeType.STR),
+                new Lexeme("=", LexemeType.ASSIGN),
+                new Lexeme("value", LexemeType.STR),
+        };
+        Scanner scanner = new Scanner();
+        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+    }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import pro.karagodin.commands.CatCommand;
@@ -28,11 +29,34 @@ public class Parser {
             entry("echo", c -> new EchoCommand()));
 
     public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
+        if(isAssignVariable(lexemes)) {
+            parseAssignVariable(lexemes);
+            return new ArrayList<>();
+        }
         var cmdsLexemes = splitByPipe(lexemes);
         var cmds = new ArrayList<Command>();
         for(var cmdLexemes: cmdsLexemes)
             cmds.add(parseCommand(cmdLexemes));
         return cmds;
+    }
+
+    private boolean isAssignVariable(List<Lexeme> lexemes){
+        return lexemes.size() >= 2
+                && lexemes.get(0).getType() == LexemeType.STR
+                && lexemes.get(1).getType() == LexemeType.ASSIGN
+                && isVariable(lexemes.get(0).getView());
+    }
+
+    private boolean isVariable(String str) {
+        return str.matches("[a-zA-Z_]\\w*");
+    }
+
+    private void parseAssignVariable(List<Lexeme> lexemes)  {
+        Enviroment.setVariable(lexemes.get(0).getView(), parseVariableValue(lexemes));
+    }
+
+    private String parseVariableValue(List<Lexeme> lexemes){
+        return lexemes.stream().skip(2).map(Lexeme::getView).collect(Collectors.joining());
     }
 
     private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
