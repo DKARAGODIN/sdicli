@@ -1,11 +1,12 @@
 package pro.karagodin;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class Enviroment {
 
-    private static final Map<String, String> ENVIRONMENT_VARIABLES = System.getenv();
+    private static final Map<String, String> ENVIRONMENT_VARIABLES = new HashMap<>(System.getenv());
 
     public static String getVariableValue(String var) {
         return ENVIRONMENT_VARIABLES.get(var);
