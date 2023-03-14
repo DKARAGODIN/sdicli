@@ -111,7 +111,7 @@ public class Parser {
             e.setNeedToPrintStackTrace(false);
             throw e;
         }
-        return STR_TO_CMD_FACTORY.get(cmdName).apply("booba");
+        return STR_TO_CMD_FACTORY.get(cmdName).apply(cmdName);
 
     }
 }
