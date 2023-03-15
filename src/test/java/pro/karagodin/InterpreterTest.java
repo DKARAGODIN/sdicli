@@ -46,15 +46,7 @@ public class InterpreterTest {
         System.setIn(testIn);
     }
 
-    private String getOutput() {
-        return testOut.toString();
-    }
-
-    @Test
-    @Order(1)
-    public void test() throws InterruptedException {
-        provideInput("echo hello world" + EOL);
-
+    private Thread getInterpreterThread() {
         Runnable runnable = () -> {
             Interpreter interpreter = new Interpreter();
             try {
@@ -63,8 +55,18 @@ public class InterpreterTest {
                 throw new RuntimeException(e);
             }
         };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        return new Thread(runnable);
+    }
+
+    private String getOutput() {
+        return testOut.toString();
+    }
+
+    @Test
+    @Order(1)
+    public void test() throws InterruptedException {
+        provideInput("echo hello world" + EOL);
+        getInterpreterThread().start();
         Thread.sleep(250);
         String actual = getOutput();
         assertEquals("> hello world" + EOL + "> ", actual);
@@ -74,17 +76,7 @@ public class InterpreterTest {
     @Order(2)
     public void testPipe() throws InterruptedException {
         provideInput("echo hello | wc" + EOL);
-
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter();
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        getInterpreterThread().start();
         Thread.sleep(250);
         String actual = getOutput();
         assertEquals("> 1 1 5" + EOL + "> ", actual);
@@ -94,17 +86,7 @@ public class InterpreterTest {
     @Order(3)
     public void testLongPipe() throws InterruptedException {
         provideInput("echo hello world | wc | cat " + EOL);
-
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter();
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        getInterpreterThread().start();
         Thread.sleep(250);
         String actual = getOutput();
         assertEquals("> 1 2 11" + EOL + "> ", actual);
@@ -114,17 +96,7 @@ public class InterpreterTest {
     @Order(4)
     public void testLongPipe2() throws InterruptedException {
         provideInput("echo hello world | wc | cat | wc" + EOL);
-
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter();
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        getInterpreterThread().start();
         Thread.sleep(250);
         String actual = getOutput();
         assertEquals("> 1 3 6" + EOL + "> ", actual);
@@ -134,18 +106,7 @@ public class InterpreterTest {
     @Order(5)
     public void testTwoLines() throws InterruptedException {
         provideInput("echo hello world \n echo hello world " + EOL);
-
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter();
-
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        getInterpreterThread().start();
         Thread.sleep(250);
         String actual = getOutput();
         assertEquals("> hello world" + EOL + "> hello world" + EOL + "> ", actual);
@@ -183,17 +144,7 @@ public class InterpreterTest {
     @Order(7)
     public void testPwd() throws InterruptedException {
         provideInput("pwd " + EOL);
-
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter();
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
+        getInterpreterThread().start();
         Thread.sleep(250);
         String actual = getOutput();
         String expected = Paths.get("").toAbsolutePath().toString();
