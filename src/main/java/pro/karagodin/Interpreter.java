@@ -16,7 +16,7 @@ public class Interpreter {
         var scanner = new Scanner();
         var parser = new Parser();
         while (true) {
-            System.out.printf("> ");
+            System.out.print("> ");
             String line = bufferedReader.readLine();
             if (line == null)
                 break;
@@ -40,7 +40,7 @@ public class Interpreter {
                     e.printStackTrace(System.out);
                 }
                 if (e.isExit()) {
-                    System.exit(e.getStatusCode());
+                    exit(e);
                 }
             }
         }
@@ -49,5 +49,9 @@ public class Interpreter {
     public static void main(String[] args) throws IOException {
         Interpreter interpreter = new Interpreter();
         interpreter.start();
+    }
+
+    public void exit(CLIException e) {
+        System.exit(e.getStatusCode());
     }
 }

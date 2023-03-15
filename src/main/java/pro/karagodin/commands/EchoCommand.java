@@ -2,7 +2,6 @@ package pro.karagodin.commands;
 
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.stream.Collectors;
 
 public class EchoCommand extends Command {
 
@@ -11,7 +10,7 @@ public class EchoCommand extends Command {
         if (arguments.isEmpty()) {
             return new StringReader("");
         } else {
-            return new StringReader(arguments.stream().collect(Collectors.joining(" ")));
+            return new StringReader(String.join(" ", arguments));
         }
     }
 }

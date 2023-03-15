@@ -1,5 +1,7 @@
 package pro.karagodin;
 
+import static java.util.Map.entry;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +19,10 @@ import pro.karagodin.commands.PwdCommand;
 import pro.karagodin.commands.WcCommand;
 import pro.karagodin.exceptions.CLIException;
 
-import static java.util.Map.entry;
-
 public class Parser {
 
     private static final Map<String, Function<String, Command>> STR_TO_CMD_FACTORY = Map.ofEntries(
             entry("cat", c -> new CatCommand()),
-            entry("exec", ExecuteCommand::new),
             entry("wc", c -> new WcCommand()),
             entry("pwd", c -> new PwdCommand()),
             entry("exit", c -> new ExitCommand()),
@@ -48,22 +47,22 @@ public class Parser {
         var matcher = pattern.matcher(text);
         var replacedLine = new StringBuilder();
         while (matcher.find())
-            matcher.appendReplacement(replacedLine, Enviroment.getVariableValue(matcher.group(1)));
+            matcher.appendReplacement(replacedLine, Environment.getVariableValue(matcher.group(1)));
         matcher.appendTail(replacedLine);
         return replacedLine.toString();
     }
 
     private Lexeme substitute(Lexeme lex) {
-        if (lex.getType() == LexemeType.STR || lex.getType() == LexemeType.DQ)
-            return new Lexeme(substitute(lex.getView()), lex.getType());
+        if (lex.type() == LexemeType.STR || lex.type() == LexemeType.DQ)
+            return new Lexeme(substitute(lex.view()), lex.type());
         return lex;
     }
 
     private boolean isAssignVariable(List<Lexeme> lexemes) {
         return lexemes.size() >= 2
-                && lexemes.get(0).getType() == LexemeType.STR
-                && lexemes.get(1).getType() == LexemeType.ASSIGN
-                && isVariable(lexemes.get(0).getView());
+                && lexemes.get(0).type() == LexemeType.STR
+                && lexemes.get(1).type() == LexemeType.ASSIGN
+                && isVariable(lexemes.get(0).view());
     }
 
     private boolean isVariable(String str) {
@@ -71,14 +70,14 @@ public class Parser {
     }
 
     private void parseAssignVariable(List<Lexeme> lexemes) {
-        Enviroment.setVariable(lexemes.get(0).getView(), parseVariableValue(lexemes));
+        Environment.setVariable(lexemes.get(0).view(), parseVariableValue(lexemes));
     }
 
     private String parseVariableValue(List<Lexeme> lexemes) {
-        return lexemes.stream().skip(2).map(this::substitute).map(Lexeme::getView).collect(Collectors.joining());
+        return lexemes.stream().skip(2).map(this::substitute).map(Lexeme::view).collect(Collectors.joining());
     }
 
-    private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
+    private Command parseCommand(List<Lexeme> cmdLexemes) {
         var cmdAndArgs = parseCommandAndArguments(cmdLexemes);
         var cmd = getCommandByName(cmdAndArgs.get(0));
         cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
@@ -87,7 +86,7 @@ public class Parser {
 
     private List<List<Lexeme>> splitByPipe(List<Lexeme> lexemes) {
         var pipesIndexes = IntStream.range(0, lexemes.size())
-                .filter(i -> lexemes.get(i).getType() == LexemeType.PIPE)
+                .filter(i -> lexemes.get(i).type() == LexemeType.PIPE)
                 .boxed().toList();
         var cmds = new ArrayList<>(IntStream.range(0, pipesIndexes.size())
                 .mapToObj(i -> lexemes.subList(i > 0 ? pipesIndexes.get(i - 1) + 1 : 0, pipesIndexes.get(i)))
@@ -113,23 +112,21 @@ public class Parser {
     private int skipSpaces(int startIndex, List<Lexeme> lexemes) {
         return (int) (startIndex + lexemes.stream()
                 .skip(startIndex)
-                .takeWhile(l -> l.getType() == LexemeType.SPACE)
+                .takeWhile(l -> l.type() == LexemeType.SPACE)
                 .count());
     }
 
     private List<String> getCmdOrArgComponents(int startIndex, List<Lexeme> lexemes) {
         return lexemes.stream()
                 .skip(startIndex)
-                .takeWhile(lex -> lex.getType() != LexemeType.SPACE)
+                .takeWhile(lex -> lex.type() != LexemeType.SPACE)
                 .map(this::substitute)
-                .map(Lexeme::getView).toList();
+                .map(Lexeme::view).toList();
     }
 
-    private Command getCommandByName(String cmdName) throws CLIException {
+    private Command getCommandByName(String cmdName) {
         if (!STR_TO_CMD_FACTORY.containsKey(cmdName)) {
-            CLIException e = new CLIException("Not known command: " + cmdName);
-            e.setNeedToPrintStackTrace(false);
-            throw e;
+            return new ExecuteCommand(cmdName);
         }
         return STR_TO_CMD_FACTORY.get(cmdName).apply(cmdName);
 

@@ -11,12 +11,12 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import pro.karagodin.Enviroment;
+import pro.karagodin.Environment;
 import pro.karagodin.exceptions.CLIException;
 
 public class ExecuteCommand extends Command {
 
-    private String command;
+    private final String command;
 
     public ExecuteCommand(String command) {
         this.command = command;
@@ -24,9 +24,6 @@ public class ExecuteCommand extends Command {
 
     /**
      * TODO Rewrite with multithreading, cleaner resources handling
-     * @param reader
-     * @return
-     * @throws CLIException
      */
 
     @Override
@@ -48,7 +45,7 @@ public class ExecuteCommand extends Command {
             //Writing to process stdIn
             OutputStream processInput = p.getOutputStream();
             bufferedProcessInput = new BufferedWriter(new OutputStreamWriter(processInput, StandardCharsets.UTF_8));
-            String line = null;
+            String line;
             if (reader != null) {
                 BufferedReader inputReader = new BufferedReader(reader);
                 while (true) {
@@ -63,12 +60,10 @@ public class ExecuteCommand extends Command {
             }
 
             StringBuilder sb = new StringBuilder();
-            line = null;
             while ((line = standardOut.readLine()) != null) {
                 sb.append(line);
                 sb.append(System.lineSeparator());
             }
-            line = null;
             while ((line = standardErr.readLine()) != null) {
                 sb.append(line);
                 sb.append(System.lineSeparator());
@@ -111,9 +106,9 @@ public class ExecuteCommand extends Command {
     }
 
     private String[] getEnvp() {
-        String[] envp = new String[Enviroment.getEnvironmentSize()];
+        String[] envp = new String[Environment.getEnvironmentSize()];
         int i = 0;
-        for (Map.Entry<String, String> entry : Enviroment.getEntriesSet()) {
+        for (Map.Entry<String, String> entry : Environment.getEntriesSet()) {
             envp[i] = entry.getKey() + "=" + entry.getValue();
             i++;
         }

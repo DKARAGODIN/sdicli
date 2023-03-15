@@ -10,7 +10,7 @@ public class ExitCommand extends Command {
 
     private static final List<String> GOODBYES =
             List.of("Good bye", "See you soon", "Bis bald", "Au revoir", "It was awesome, you are awesome", "Till next time", "I'll be missing you");
-    private Random rand = new Random();
+    private final Random rand = new Random();
 
     @Override
     public Reader run(Reader reader) throws CLIException {

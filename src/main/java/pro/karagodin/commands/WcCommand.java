@@ -38,7 +38,7 @@ public class WcCommand extends Command {
     }
 
     private void read(BufferedReader br) throws IOException {
-        String line = null;
+        String line;
         while ((line = br.readLine()) != null) {
             lines++;
             bytes += line.getBytes(StandardCharsets.UTF_8).length;

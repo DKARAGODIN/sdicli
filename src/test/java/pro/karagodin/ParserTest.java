@@ -102,10 +102,10 @@ public class ParserTest {
                 new Lexeme("value", LexemeType.STR),
         };
         var parser = new Parser();
-        Enviroment.setVariable("var", "wrongValue");
+        Environment.setVariable("var", "wrongValue");
         var cmds =  parser.parse(Arrays.asList(lexemes));
         assertEquals(0, cmds.size());
-        assertEquals("value", Enviroment.getVariableValue("var"));
+        assertEquals("value", Environment.getVariableValue("var"));
     }
 
     @Test
@@ -124,10 +124,10 @@ public class ParserTest {
                 new Lexeme("v5", LexemeType.SQ),
         };
         var parser = new Parser();
-        Enviroment.setVariable("var", "wrongValue");
+        Environment.setVariable("var", "wrongValue");
         var cmds =  parser.parse(Arrays.asList(lexemes));
         assertEquals(0, cmds.size());
-        assertEquals("v1 v2|v3=v4v5", Enviroment.getVariableValue("var"));
+        assertEquals("v1 v2|v3=v4v5", Environment.getVariableValue("var"));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class ParserTest {
                 new Lexeme(" ", LexemeType.SPACE),
                 new Lexeme("$var", LexemeType.STR),
         };
-        Enviroment.setVariable("var", "value");
+        Environment.setVariable("var", "value");
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("value"));
 
@@ -152,13 +152,13 @@ public class ParserTest {
                 new Lexeme("=", LexemeType.ASSIGN),
                 new Lexeme("$otherVar", LexemeType.STR),
         };
-        Enviroment.setVariable("otherVar", "value");
+        Environment.setVariable("otherVar", "value");
 
-        Enviroment.setVariable("var", "wrongValue");
+        Environment.setVariable("var", "wrongValue");
         var parser = new Parser();
         var cmds =  parser.parse(Arrays.asList(lexemes));
         assertEquals(0, cmds.size());
-        assertEquals("value", Enviroment.getVariableValue("var"));
+        assertEquals("value", Environment.getVariableValue("var"));
     }
 
     @Test
@@ -168,7 +168,7 @@ public class ParserTest {
                 new Lexeme(" ", LexemeType.SPACE),
                 new Lexeme("$var$var", LexemeType.STR),
         };
-        Enviroment.setVariable("var", "value");
+        Environment.setVariable("var", "value");
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("valuevalue"));
 
@@ -183,7 +183,7 @@ public class ParserTest {
                 new Lexeme(" ", LexemeType.SPACE),
                 new Lexeme("str$var", LexemeType.DQ),
         };
-        Enviroment.setVariable("var", "value");
+        Environment.setVariable("var", "value");
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("strvalue"));
 
@@ -198,7 +198,7 @@ public class ParserTest {
                 new Lexeme(" ", LexemeType.SPACE),
                 new Lexeme("str$var", LexemeType.SQ),
         };
-        Enviroment.setVariable("var", "value");
+        Environment.setVariable("var", "value");
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("str$var"));
 

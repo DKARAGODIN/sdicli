@@ -21,7 +21,7 @@ public class CatCommand extends Command {
             StringBuilder sb = new StringBuilder();
             for (String fileName : arguments) {
                 try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
-                    String line = null;
+                    String line;
                     while ((line = fileReader.readLine()) != null) {
                         sb.append(line);
                         sb.append(System.lineSeparator());
@@ -34,8 +34,7 @@ public class CatCommand extends Command {
                     throw new CLIException("Exception happened wile reading file " + fileName, e);
                 }
             }
-            StringReader outputReader = new StringReader(sb.toString());
-            return outputReader;
+            return new StringReader(sb.toString());
         }
     }
 }

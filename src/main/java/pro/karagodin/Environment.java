@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class Enviroment {
+public class Environment {
 
     private static final Map<String, String> ENVIRONMENT_VARIABLES = new HashMap<>(System.getenv());
 
