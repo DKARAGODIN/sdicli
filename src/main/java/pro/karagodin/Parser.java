@@ -77,8 +77,10 @@ public class Parser {
         return lexemes.stream().skip(2).map(this::substitute).map(Lexeme::view).collect(Collectors.joining());
     }
 
-    private Command parseCommand(List<Lexeme> cmdLexemes) {
+    private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(cmdLexemes);
+        if(cmdAndArgs.isEmpty())
+            throw new CLIException("Empty command");
         var cmd = getCommandByName(cmdAndArgs.get(0));
         cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
         return cmd;

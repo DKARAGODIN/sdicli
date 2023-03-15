@@ -1,153 +1,68 @@
 package pro.karagodin;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import pro.karagodin.exceptions.CLIException;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class InterpreterTest {
 
-    private static final String EOL = System.lineSeparator();
-
-    private final InputStream systemIn = System.in;
-    private final PrintStream systemOut = System.out;
-
-    private ByteArrayOutputStream testOut;
-
-    @BeforeEach
-    public void setUpOutput() {
-        testOut = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(testOut));
-    }
-
-    @AfterEach
-    public void restoreSystemInputOutput() {
-        System.setIn(systemIn);
-        System.setOut(systemOut);
-    }
-
-    private void provideInput(String data) {
-        ByteArrayInputStream testIn = new ByteArrayInputStream(data.getBytes());
-        System.setIn(testIn);
-    }
-
-    private Thread getInterpreterThread() {
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter();
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        return new Thread(runnable);
-    }
-
-    private String getOutput() {
-        return testOut.toString();
+    private String getInterpreterOutput(String line) throws CLIException, IOException {
+        var interpreter = new Interpreter();
+        try (var reader = interpreter.interpret(line)) {
+            return new BufferedReader(reader).lines().collect(Collectors.joining("\n"));
+        }
     }
 
     @Test
-    @Order(1)
-    public void test() throws InterruptedException {
-        provideInput("echo hello world" + EOL);
-        getInterpreterThread().start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        assertEquals("> hello world" + EOL + "> ", actual);
+    public void testPipe() throws CLIException, IOException {
+        assertEquals("1 1 5", getInterpreterOutput("echo hello | wc"));
     }
 
     @Test
-    @Order(2)
-    public void testPipe() throws InterruptedException {
-        provideInput("echo hello | wc" + EOL);
-        getInterpreterThread().start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        assertEquals("> 1 1 5" + EOL + "> ", actual);
+    public void testLongPipe() throws CLIException, IOException {
+        assertEquals("1 2 11", getInterpreterOutput("echo hello world | wc | cat "));
     }
 
     @Test
-    @Order(3)
-    public void testLongPipe() throws InterruptedException {
-        provideInput("echo hello world | wc | cat " + EOL);
-        getInterpreterThread().start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        assertEquals("> 1 2 11" + EOL + "> ", actual);
+    public void testLongPipe2() throws CLIException, IOException {
+        assertEquals("1 3 6", getInterpreterOutput("echo hello world | wc | cat | wc"));
     }
 
     @Test
-    @Order(4)
-    public void testLongPipe2() throws InterruptedException {
-        provideInput("echo hello world | wc | cat | wc" + EOL);
-        getInterpreterThread().start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        assertEquals("> 1 3 6" + EOL + "> ", actual);
+    public void testPwd() throws CLIException, IOException {
+        assertEquals(Paths.get("").toAbsolutePath().toString(), getInterpreterOutput("pwd "));
     }
 
     @Test
-    @Order(5)
-    public void testTwoLines() throws InterruptedException {
-        provideInput("echo hello world \n echo hello world " + EOL);
-        getInterpreterThread().start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        assertEquals("> hello world" + EOL + "> hello world" + EOL + "> ", actual);
+    public void testThrowsWhenEmptyCommandAfterPipe() {
+        assertThrows(CLIException.class, () -> getInterpreterOutput("pwd | "));
     }
 
     @Test
-    @Order(6)
-    public void testExit() throws InterruptedException {
-        provideInput("exit " + EOL);
-
-        List<String> exited = new ArrayList<>();
-
-        Runnable runnable = () -> {
-            Interpreter interpreter = new Interpreter() {
-                @Override
-                public void exit(CLIException e) {
-                    exited.add("Exited");
-                }
-            };
-            try {
-                interpreter.start();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        assertNotNull(actual);
-        assertFalse(exited.isEmpty());
+    public void testThrowsWhenEmptyCommandBeforePipe() {
+        assertThrows(CLIException.class, () -> getInterpreterOutput(" | pwd "));
     }
 
     @Test
-    @Order(7)
-    public void testPwd() throws InterruptedException {
-        provideInput("pwd " + EOL);
-        getInterpreterThread().start();
-        Thread.sleep(250);
-        String actual = getOutput();
-        String expected = Paths.get("").toAbsolutePath().toString();
-        assertEquals("> " + expected + EOL + "> ", actual);
+    public void testThrowsWhenEmptyCommandBetweenPipe() {
+        assertThrows(CLIException.class, () -> getInterpreterOutput("echo a | | cat "));
     }
+
+    @Test
+    public void testThrowsWhenNotClosedDoubleQuote() {
+        assertThrows(CLIException.class, () -> getInterpreterOutput("echo \"abc"));
+    }
+
+    @Test
+    public void testThrowsWhenNotClosedSingleQuote() {
+        assertThrows(CLIException.class, () -> getInterpreterOutput("echo 'abc"));
+    }
+
+
 }

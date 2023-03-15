@@ -1,57 +1,19 @@
 package pro.karagodin;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 
 import pro.karagodin.exceptions.CLIException;
 
+import java.io.Reader;
+
 public class Interpreter {
+    private final Runner runner = new Runner();
+    private final Scanner scanner = new Scanner();
+    private final Parser parser = new Parser();
 
-    public void start() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-        Runner runner = new Runner();
-        var scanner = new Scanner();
-        var parser = new Parser();
-        while (true) {
-            System.out.print("> ");
-            String line = bufferedReader.readLine();
-            if (line == null)
-                break;
-            if ("".equals(line))
-                continue;
 
-            try {
-                var lexemes = scanner.scan(line);
-                var commands = parser.parse(lexemes);
-                Reader reader = runner.run(commands);
-
-                try (BufferedReader resultReader = new BufferedReader(reader)) {
-                    String strCurrentLine;
-                    while ((strCurrentLine = resultReader.readLine()) != null) {
-                        System.out.println(strCurrentLine);
-                    }
-                }
-            } catch (CLIException e) {
-                System.out.println(e.getMessage());
-                if (e.isNeedToPrintStackTrace()) {
-                    e.printStackTrace(System.out);
-                }
-                if (e.isExit()) {
-                    exit(e);
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        Interpreter interpreter = new Interpreter();
-        interpreter.start();
-    }
-
-    public void exit(CLIException e) {
-        System.exit(e.getStatusCode());
+    public Reader interpret(String line) throws CLIException {
+        var lexemes = scanner.scan(line);
+        var commands = parser.parse(lexemes);
+        return runner.run(commands);
     }
 }
