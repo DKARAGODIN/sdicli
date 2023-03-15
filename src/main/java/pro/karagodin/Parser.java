@@ -79,7 +79,7 @@ public class Parser {
 
     private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(cmdLexemes);
-        if(cmdAndArgs.isEmpty())
+        if (cmdAndArgs.isEmpty())
             throw new CLIException("Empty command");
         var cmd = getCommandByName(cmdAndArgs.get(0));
         cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));

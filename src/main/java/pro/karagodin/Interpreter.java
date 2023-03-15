@@ -1,9 +1,8 @@
 package pro.karagodin;
 
+import java.io.Reader;
 
 import pro.karagodin.exceptions.CLIException;
-
-import java.io.Reader;
 
 public class Interpreter {
     private final Runner runner = new Runner();
