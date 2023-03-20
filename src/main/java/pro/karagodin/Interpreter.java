@@ -12,11 +12,8 @@ public class Interpreter {
 
     public void start() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-        Runner runner = new Runner();
-        var scanner = new Scanner();
-        var parser = new Parser();
         while (true) {
-            System.out.printf("> ");
+            System.out.print("> ");
             String line = bufferedReader.readLine();
             if (line == null)
                 break;
@@ -24,9 +21,9 @@ public class Interpreter {
                 continue;
 
             try {
-                var lexemes = scanner.scan(line);
-                var commands = parser.parse(lexemes);
-                Reader reader = runner.run(commands);
+                var lexemes = Scanner.scan(line);
+                var commands = Parser.parse(lexemes);
+                Reader reader = Runner.run(commands);
 
                 try (BufferedReader resultReader = new BufferedReader(reader)) {
                     String strCurrentLine;

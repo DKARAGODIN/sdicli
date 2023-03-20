@@ -23,8 +23,7 @@ public class ParserTest {
         };
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("file1", "file2"));
-        var parser = new Parser();
-        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+        assertListOfCommands(expectedCmds, Parser.parse(Arrays.asList(lexemes)));
     }
 
     @Test
@@ -41,8 +40,7 @@ public class ParserTest {
         };
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("file1", "file2"));
-        var parser = new Parser();
-        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+        assertListOfCommands(expectedCmds, Parser.parse(Arrays.asList(lexemes)));
     }
 
     @Test
@@ -59,8 +57,7 @@ public class ParserTest {
         };
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of("file1", "file2"));
-        var parser = new Parser();
-        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+        assertListOfCommands(expectedCmds, Parser.parse(Arrays.asList(lexemes)));
     }
 
     @Test
@@ -70,8 +67,7 @@ public class ParserTest {
         };
         var expectedCmds = List.of(new CatCommand());
         expectedCmds.get(0).setArguments(List.of());
-        var parser = new Parser();
-        assertListOfCommands(expectedCmds, parser.parse(Arrays.asList(lexemes)));
+        assertListOfCommands(expectedCmds, Parser.parse(Arrays.asList(lexemes)));
     }
 
     private void assertListOfCommands(List<? extends Command> expected, List<Command> actual) {

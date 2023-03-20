@@ -15,10 +15,9 @@ class ExecuteCommandTest {
 
     @Test
     public void test() throws Exception {
-        Runner runner = new Runner();
         Command command = new ExecuteCommand("java");
         command.setArguments(Arrays.asList("-version"));
-        Reader reader = runner.run(List.of(command));
+        Reader reader = Runner.run(List.of(command));
 
         BufferedReader br = new BufferedReader(reader);
         StringBuilder actualBuffer = new StringBuilder();

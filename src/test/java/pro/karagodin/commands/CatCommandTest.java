@@ -15,13 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class CatCommandTest {
     @Test
     public void testArgument() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new CatCommand();
         first.setArguments(List.of(Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString()));
         commands.add(first);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         StringBuilder actualBuffer = new StringBuilder();
@@ -38,7 +37,6 @@ class CatCommandTest {
 
     @Test
     public void testArguments() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new CatCommand();
@@ -46,7 +44,7 @@ class CatCommandTest {
                 Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString(),
                 Paths.get("", "src", "test", "resources", "commands", "testcatcommand.txt").toString()));
         commands.add(first);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         StringBuilder actualBuffer = new StringBuilder();
@@ -68,7 +66,6 @@ class CatCommandTest {
 
     @Test
     public void testOnlyReader() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new EchoCommand();
@@ -76,7 +73,7 @@ class CatCommandTest {
         commands.add(first);
         Command second = new CatCommand();
         commands.add(second);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
@@ -85,7 +82,6 @@ class CatCommandTest {
 
     @Test
     public void testArgumentsAndReader() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new EchoCommand();
@@ -96,7 +92,7 @@ class CatCommandTest {
                 Paths.get("", "src", "test", "resources", "commands", "wordcount.txt").toString(),
                 Paths.get("", "src", "test", "resources", "commands", "testcatcommand.txt").toString()));
         commands.add(second);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         StringBuilder actualBuffer = new StringBuilder();

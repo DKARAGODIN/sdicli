@@ -15,12 +15,11 @@ class EchoCommandTest {
 
     @Test
     public void empty() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command a = new EchoCommand();
         commands.add(a);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
@@ -29,13 +28,12 @@ class EchoCommandTest {
 
     @Test
     public void arguments() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command a = new EchoCommand();
         a.setArguments(Arrays.asList("Hello world"));
         commands.add(a);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
@@ -44,7 +42,6 @@ class EchoCommandTest {
 
     @Test
     public void incomingReader() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new EchoCommand();
@@ -52,7 +49,7 @@ class EchoCommandTest {
         commands.add(first);
         Command second = new EchoCommand();
         commands.add(second);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
@@ -61,7 +58,6 @@ class EchoCommandTest {
 
     @Test
     public void incomingReaderAndArguments() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new EchoCommand();
@@ -70,7 +66,7 @@ class EchoCommandTest {
         Command second = new EchoCommand();
         commands.add(second);
         second.setArguments(Arrays.asList("Second echo command arguments "));
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();

@@ -19,8 +19,7 @@ public class ScannerTest {
             new Lexeme(" ", LexemeType.SPACE),
             new Lexeme("file2", LexemeType.STR)
         };
-        Scanner scanner = new Scanner();
-        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+        assertIterableEquals(Arrays.asList(expected), Scanner.scan(str));
     }
 
     @Test
@@ -33,8 +32,7 @@ public class ScannerTest {
             new Lexeme(" ", LexemeType.SPACE),
             new Lexeme("file2 name", LexemeType.SQ)
         };
-        Scanner scanner = new Scanner();
-        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+        assertIterableEquals(Arrays.asList(expected), Scanner.scan(str));
     }
 
     @Test
@@ -47,8 +45,7 @@ public class ScannerTest {
             new Lexeme(" ", LexemeType.SPACE),
             new Lexeme("file2 \"name\"", LexemeType.SQ)
         };
-        Scanner scanner = new Scanner();
-        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+        assertIterableEquals(Arrays.asList(expected), Scanner.scan(str));
     }
 
     @Test
@@ -60,7 +57,6 @@ public class ScannerTest {
             new Lexeme("file", LexemeType.DQ),
             new Lexeme(" name", LexemeType.SQ)
         };
-        Scanner scanner = new Scanner();
-        assertIterableEquals(Arrays.asList(expected), scanner.scan(str));
+        assertIterableEquals(Arrays.asList(expected), Scanner.scan(str));
     }
 }

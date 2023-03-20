@@ -13,14 +13,14 @@ import pro.karagodin.commands.WcCommand;
 import pro.karagodin.exceptions.CLIException;
 
 public class Parser {
-    public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
+    public static List<Command> parse(List<Lexeme> lexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(lexemes);
         var cmd = getCommandByName(cmdAndArgs.get(0));
         cmd.setArguments(cmdAndArgs.subList(1, cmdAndArgs.size()));
         return List.of(cmd);
     }
 
-    private List<String> parseCommandAndArguments(List<Lexeme> lexemes) {
+    private static List<String> parseCommandAndArguments(List<Lexeme> lexemes) {
         List<String> args = new ArrayList<>();
         var argBuilder = new StringBuilder();
         int i = 0;
@@ -41,7 +41,7 @@ public class Parser {
         return args;
     }
 
-    private Command getCommandByName(String cmdName) throws CLIException {
+    private static Command getCommandByName(String cmdName) {
         switch (cmdName) {
             case "cat":
                 return new CatCommand();
