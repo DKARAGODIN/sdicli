@@ -20,7 +20,13 @@ public class Scanner {
             entry("space", LexemeType.SPACE),
             entry("str", LexemeType.STR));
 
+    private Pattern pattern = Pattern.compile(getFullRegex());
+
     public List<Lexeme> scan(String str) throws CLIException {
+        return scan(str, STR_TO_LEXEME_TYPE.keySet());
+    }
+
+    private String getFullRegex() {
         var strRegex = "(?<str>[^=\\|\\s\'\"]+)";
         var equalRegex = "(?<eq>=)";
         var pipeRegex = "(?<pipe>\\|)";
@@ -29,22 +35,16 @@ public class Scanner {
         var spaceRegex = "(?<space>[\\s]+)";
         var fullRegex = "^" + strRegex + "|" + equalRegex + "|" + pipeRegex + "|" + dqRegex + "|" + sqRegex + "|"
                 + spaceRegex;
-
-        return scan(str, fullRegex, STR_TO_LEXEME_TYPE.keySet());
-
+        return fullRegex;
     }
 
-    public static List<Lexeme> scan(String text, String regex, Collection<String> groupsNames) throws CLIException {
-        //System.out.println("regex: " + regex);
-        //System.out.println("text: " + text);
-        var pattern = Pattern.compile(regex);
+    private List<Lexeme> scan(String text, Collection<String> groupsNames) throws CLIException {
         var matcher = pattern.matcher(text);
         var lexemes = new ArrayList<Lexeme>();
         while (matcher.find()) {
             for (var groupName : groupsNames)
                 if (matcher.group(groupName) != null) {
                     lexemes.add(new Lexeme(matcher.group(groupName), STR_TO_LEXEME_TYPE.get(groupName)));
-                    //System.out.println(groupName + ": " + matcher.group(groupName));
                     break;
 
                 }
