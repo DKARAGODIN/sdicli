@@ -8,9 +8,21 @@ import pro.karagodin.exceptions.CLIException;
 
 public abstract class Command {
 
+    /**
+     * Represents exit code of the command. {@Link Runner} can check this value
+     */
     protected int exitCode = 0;
+    /**
+     * Arguments used to specify children behaviour
+     */
     protected List<String> arguments = new ArrayList<>();
 
+    /**
+     * Method to fire command. {@code reader} represents input stream for the command.
+     * @param reader
+     * @return {@link Reader} output stream - result of command execution
+     * @throws CLIException
+     */
     public abstract Reader run(Reader reader) throws CLIException;
 
     public List<String> getArguments() {

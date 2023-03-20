@@ -7,6 +7,13 @@ import java.nio.file.Paths;
 import pro.karagodin.exceptions.CLIException;
 
 public class PwdCommand extends Command {
+
+    /**
+     * Returns present working directory string
+     * @param reader
+     * @return
+     * @throws CLIException
+     */
     @Override
     public Reader run(Reader reader) throws CLIException {
         String s = Paths.get("").toAbsolutePath().toString();

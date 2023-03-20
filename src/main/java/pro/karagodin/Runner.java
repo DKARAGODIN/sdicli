@@ -9,7 +9,7 @@ import pro.karagodin.exceptions.CLIException;
 
 public class Runner {
 
-    public Reader run(List<Command> commands) throws CLIException {
+    public static Reader run(List<Command> commands) throws CLIException {
         Reader reader = null;
         for (Command command : commands) {
             reader = command.run(reader);

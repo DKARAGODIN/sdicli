@@ -16,13 +16,12 @@ class WcCommandTest {
 
     @Test
     public void testArgumenst() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new WcCommand();
         first.setArguments(Arrays.asList(Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString()));
         commands.add(first);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
@@ -31,7 +30,6 @@ class WcCommandTest {
 
     @Test
     public void testArgumenstAndReader() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new EchoCommand();
@@ -40,7 +38,7 @@ class WcCommandTest {
         Command second = new WcCommand();
         second.setArguments(Arrays.asList(Paths.get("", "src", "test", "resources", "commands", "text3.txt").toString()));
         commands.add(second);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();
@@ -49,7 +47,6 @@ class WcCommandTest {
 
     @Test
     public void testOnlyReader() throws Exception {
-        Runner runner = new Runner();
         List<Command> commands = new ArrayList<>();
 
         Command first = new EchoCommand();
@@ -57,7 +54,7 @@ class WcCommandTest {
         commands.add(first);
         Command second = new WcCommand();
         commands.add(second);
-        Reader reader = runner.run(commands);
+        Reader reader = Runner.run(commands);
 
         BufferedReader br = new BufferedReader(reader);
         String actual = br.readLine();

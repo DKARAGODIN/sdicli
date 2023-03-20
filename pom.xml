@@ -42,7 +42,7 @@
                         <index>true</index>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>pro.karagodin.Interpreter</mainClass>
+                            <mainClass>pro.karagodin.CLI</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

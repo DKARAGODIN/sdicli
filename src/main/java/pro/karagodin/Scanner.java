@@ -20,7 +20,7 @@ public class Scanner {
             entry("space", LexemeType.SPACE),
             entry("str", LexemeType.STR));
 
-    public List<Lexeme> scan(String str) throws CLIException {
+    public static List<Lexeme> scan(String str) throws CLIException {
         var strRegex = "(?<str>[^=\\|\\s'\"]+)";
         var equalRegex = "(?<eq>=)";
         var pipeRegex = "(?<pipe>\\|)";
