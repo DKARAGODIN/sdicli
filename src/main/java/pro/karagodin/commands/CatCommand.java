@@ -13,29 +13,37 @@ import pro.karagodin.exceptions.CLIException;
  * TODO Implement custom reader to reduce memory usage
  */
 public class CatCommand extends Command {
+
+    /**
+     * Displays content of the files from arguments or the content of {@code reader}
+     * @param reader
+     * @return
+     * @throws CLIException if file was not found or happened other {@Link Exception}
+     */
     @Override
     public Reader run(Reader reader) throws CLIException {
         if (this.arguments.isEmpty()) {
             return reader == null ? new StringReader("") : reader;
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (String fileName : arguments) {
-                try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
-                    String line = null;
-                    while ((line = fileReader.readLine()) != null) {
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
-                    }
-                } catch (FileNotFoundException e) {
-                    CLIException exception = new CLIException(fileName + ": No such file or directory");
-                    exception.setNeedToPrintStackTrace(false);
-                    throw exception;
-                } catch (Exception e) {
-                    throw new CLIException("Exception happened wile reading file " + fileName, e);
-                }
-            }
-            StringReader outputReader = new StringReader(sb.toString());
-            return outputReader;
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (String fileName : arguments) {
+            try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
+                String line = null;
+                while ((line = fileReader.readLine()) != null) {
+                    sb.append(line);
+                    sb.append(System.lineSeparator());
+                }
+            } catch (FileNotFoundException e) {
+                CLIException exception = new CLIException(fileName + ": No such file or directory");
+                exception.setNeedToPrintStackTrace(false);
+                throw exception;
+            } catch (Exception e) {
+                throw new CLIException("Exception happened wile reading file " + fileName, e);
+            }
+        }
+
+        StringReader outputReader = new StringReader(sb.toString());
+        return outputReader;
     }
 }
