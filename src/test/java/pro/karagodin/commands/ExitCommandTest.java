@@ -12,9 +12,8 @@ class ExitCommandTest {
     @Test
     public void textException() {
         assertThrows(CLIException.class, () -> {
-            Runner runner = new Runner();
             Command command = new ExitCommand();
-            runner.run(List.of(command));
+            Runner.run(List.of(command));
         });
     }
 }

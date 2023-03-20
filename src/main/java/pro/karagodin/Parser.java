@@ -30,7 +30,7 @@ public class Parser {
 
     private static final String VARIABLE_REGEX = "[a-zA-Z_]\\w*";
 
-    public List<Command> parse(List<Lexeme> lexemes) throws CLIException {
+    public static List<Command> parse(List<Lexeme> lexemes) throws CLIException {
         if (isAssignVariable(lexemes)) {
             parseAssignVariable(lexemes);
             return new ArrayList<>();
@@ -42,7 +42,7 @@ public class Parser {
         return cmds;
     }
 
-    private String substitute(String text) {
+    private static String substitute(String text) {
         var pattern = Pattern.compile("\\$(" + VARIABLE_REGEX + ")");
         var matcher = pattern.matcher(text);
         var replacedLine = new StringBuilder();
@@ -52,32 +52,32 @@ public class Parser {
         return replacedLine.toString();
     }
 
-    private Lexeme substitute(Lexeme lex) {
+    private static Lexeme substitute(Lexeme lex) {
         if (lex.type() == LexemeType.STR || lex.type() == LexemeType.DQ)
             return new Lexeme(substitute(lex.view()), lex.type());
         return lex;
     }
 
-    private boolean isAssignVariable(List<Lexeme> lexemes) {
+    private static boolean isAssignVariable(List<Lexeme> lexemes) {
         return lexemes.size() >= 2
                 && lexemes.get(0).type() == LexemeType.STR
                 && lexemes.get(1).type() == LexemeType.ASSIGN
                 && isVariable(lexemes.get(0).view());
     }
 
-    private boolean isVariable(String str) {
+    private static boolean isVariable(String str) {
         return str.matches(VARIABLE_REGEX);
     }
 
-    private void parseAssignVariable(List<Lexeme> lexemes) {
+    private static void parseAssignVariable(List<Lexeme> lexemes) {
         Environment.setVariable(lexemes.get(0).view(), parseVariableValue(lexemes));
     }
 
-    private String parseVariableValue(List<Lexeme> lexemes) {
-        return lexemes.stream().skip(2).map(this::substitute).map(Lexeme::view).collect(Collectors.joining());
+    private static String parseVariableValue(List<Lexeme> lexemes) {
+        return lexemes.stream().skip(2).map(Parser::substitute).map(Lexeme::view).collect(Collectors.joining());
     }
 
-    private Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
+    private static Command parseCommand(List<Lexeme> cmdLexemes) throws CLIException {
         var cmdAndArgs = parseCommandAndArguments(cmdLexemes);
         if (cmdAndArgs.isEmpty())
             throw new CLIException("Empty command");
@@ -86,7 +86,7 @@ public class Parser {
         return cmd;
     }
 
-    private List<List<Lexeme>> splitByPipe(List<Lexeme> lexemes) {
+    private static List<List<Lexeme>> splitByPipe(List<Lexeme> lexemes) {
         var pipesIndexes = IntStream.range(0, lexemes.size())
                 .filter(i -> lexemes.get(i).type() == LexemeType.PIPE)
                 .boxed().toList();
@@ -98,7 +98,7 @@ public class Parser {
         return cmds;
     }
 
-    private List<String> parseCommandAndArguments(List<Lexeme> lexemes) {
+    private static List<String> parseCommandAndArguments(List<Lexeme> lexemes) {
         List<String> args = new ArrayList<>();
         int i = skipSpaces(0, lexemes);
         while (i < lexemes.size()) {
@@ -111,22 +111,22 @@ public class Parser {
     }
 
 
-    private int skipSpaces(int startIndex, List<Lexeme> lexemes) {
+    private static int skipSpaces(int startIndex, List<Lexeme> lexemes) {
         return (int) (startIndex + lexemes.stream()
                 .skip(startIndex)
                 .takeWhile(l -> l.type() == LexemeType.SPACE)
                 .count());
     }
 
-    private List<String> getCmdOrArgComponents(int startIndex, List<Lexeme> lexemes) {
+    private static List<String> getCmdOrArgComponents(int startIndex, List<Lexeme> lexemes) {
         return lexemes.stream()
                 .skip(startIndex)
                 .takeWhile(lex -> lex.type() != LexemeType.SPACE)
-                .map(this::substitute)
+                .map(Parser::substitute)
                 .map(Lexeme::view).toList();
     }
 
-    private Command getCommandByName(String cmdName) {
+    private static Command getCommandByName(String cmdName) {
         if (!STR_TO_CMD_FACTORY.containsKey(cmdName)) {
             return new ExecuteCommand(cmdName);
         }
