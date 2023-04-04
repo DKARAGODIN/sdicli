@@ -14,7 +14,16 @@ public class CLI {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
         while (true) {
-            System.out.print("> ");
+
+            var prompt = "> ";
+
+            // TODO: Informative prompt breaks tests
+//            var prompt = Environment.getVariableValue("PWD").replace(
+//                    String.format("/home/%s", Environment.getVariableValue("USER")),
+//                    "~"
+//            ) + " > ";
+
+            System.out.print(prompt);
             String line = bufferedReader.readLine();
             if (line == null)
                 break;

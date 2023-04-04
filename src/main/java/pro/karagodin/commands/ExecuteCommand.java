@@ -34,6 +34,7 @@ public class ExecuteCommand extends Command {
 
     @Override
     public Reader run(Reader reader) throws CLIException {
+        Reader result;
         Runtime runtime = Runtime.getRuntime();
 
         try {
@@ -70,7 +71,7 @@ public class ExecuteCommand extends Command {
                 }
 
                 this.exitCode = p.waitFor();
-                return new StringReader(sb.toString());
+                result = new StringReader(sb.toString());
 
             } catch (IOException | InterruptedException e) {
                 throw new CLIException("Exception happened while executing command", e);
@@ -78,6 +79,7 @@ public class ExecuteCommand extends Command {
         } catch (IOException e) {
             throw new CLIException("Exception happened while executing command", e);
         }
+        return result;
     }
 
     private String[] getCmdarray() {

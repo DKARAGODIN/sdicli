@@ -10,14 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import pro.karagodin.commands.CatCommand;
-import pro.karagodin.commands.Command;
-import pro.karagodin.commands.EchoCommand;
-import pro.karagodin.commands.ExecuteCommand;
-import pro.karagodin.commands.ExitCommand;
-import pro.karagodin.commands.GrepCommand;
-import pro.karagodin.commands.PwdCommand;
-import pro.karagodin.commands.WcCommand;
+import pro.karagodin.commands.*;
 import pro.karagodin.exceptions.CLIException;
 
 public class Parser {
@@ -28,7 +21,10 @@ public class Parser {
             entry("pwd", c -> new PwdCommand()),
             entry("exit", c -> new ExitCommand()),
             entry("echo", c -> new EchoCommand()),
-            entry("grep", c -> new GrepCommand()));
+            entry("grep", c -> new GrepCommand()),
+            entry("cd", c -> new CdCommand()),
+            entry("ls", c -> new LsCommand())
+    );
 
     private static final String VARIABLE_REGEX = "[a-zA-Z_]\\w*";
 
