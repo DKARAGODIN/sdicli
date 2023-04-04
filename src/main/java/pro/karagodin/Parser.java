@@ -10,8 +10,17 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import pro.karagodin.commands.*;
 import pro.karagodin.exceptions.CLIException;
+import pro.karagodin.commands.Command;
+import pro.karagodin.commands.CatCommand;
+import pro.karagodin.commands.WcCommand;
+import pro.karagodin.commands.PwdCommand;
+import pro.karagodin.commands.ExitCommand;
+import pro.karagodin.commands.EchoCommand;
+import pro.karagodin.commands.GrepCommand;
+import pro.karagodin.commands.CdCommand;
+import pro.karagodin.commands.LsCommand;
+import pro.karagodin.commands.ExecuteCommand;
 
 public class Parser {
 
